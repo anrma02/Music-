@@ -137,6 +137,7 @@ header {
     .menu-list {
         right: 1px;
         top: 10px;
+        z-index: 9999;
         position: absolute;
         width: 150px;
         background-color: #282828;

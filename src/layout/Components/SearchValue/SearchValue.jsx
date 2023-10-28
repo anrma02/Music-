@@ -10,7 +10,7 @@ const cx = classNames.bind(style);
 
 function SearchValue() {
     const [searchValue, setSearchValue] = useState('');
-
+    const [loading, setLoading] = useState(false);
 
     const inputRef = useRef(null);
 
@@ -21,10 +21,12 @@ function SearchValue() {
         setSearchValue(e.target.value);
     };
 
-    const clearSearchValue = () => {
-        setSearchValue('');
-    };
 
+    const handleClear = () => {
+        setSearchValue('');
+
+        inputRef.current.focus();
+    };
     console.log("🚀 ~ file: SearchValue.jsx:14 ~ SearchValue ~ searchValue:", searchValue);
     return (
         <>
@@ -45,8 +47,12 @@ function SearchValue() {
                             <div className={cx('icon-search')}>
                                 <FontAwesomeIcon icon={faSearch} />
                             </div>
-                            <div className={cx('icon-clear')} onClick={clearSearchValue}>
-                                <FontAwesomeIcon icon={faTimes} />
+                            <div className="icon-clear">
+                                {!!searchValue && !loading && (
+                                    <button onClick={handleClear}>
+                                        <FontAwesomeIcon className="text-white" icon={faXmark} />{' '}
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
