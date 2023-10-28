@@ -1,0 +1,116 @@
+:root {
+    --column-width: 185px;
+    --column-count: 6;
+    --grid-gap: 24px;
+    --min-container-width: 372px;
+    --black: #000;
+    --white: #e7e7e7;
+    --text-color: #e7e7e7;
+    --panel-gap: 8px;
+    --scrollbar-vertical-size: 16px;
+    --scrollbar-horizontal-size: 16px;
+    --main-content-width: 496;
+    --left-sidebar-width: 250px;
+    --right-sidebar-width: 0px;
+    --sidebar-transition-duration: 0ms;
+    --content-spacing: clamp(16px, 16px + (var(--main-content-width) - 600)/424 * 8px, 24px);
+    --sidebar-transition-easing: cubic-bezier(0, 0, 0, 1);
+    --background-base: #161616a1;
+    --background-highlight: #1a1a1a;
+    --background-press: #000;
+    --background-elevated-base: #242424;
+    --background-elevated-highlight: #2a2a2a;
+    --background-elevated-press: #000;
+    --background-tinted-base: hsla(0, 0%, 100%, 0.07);
+    --background-tinted-highlight: hsla(0, 0%, 100%, 0.1);
+    --background-tinted-press: hsla(0, 0%, 100%, 0.04);
+    --background-unsafe-for-small-text-base: #121212;
+    --background-unsafe-for-small-text-highlight: #121212;
+    --background-unsafe-for-small-text-press: #121212;
+    --text-base: #fff;
+    --text-subdued: #a7a7a7;
+    --text-bright-accent: #1ed760;
+    --text-negative: #f15e6c;
+    --text-warning: #ffa42b;
+    --text-positive: #1ed760;
+    --text-announcement: #3d91f4;
+    --essential-base: #fff;
+    --essential-subdued: #727272;
+    --essential-bright-accent: #1ed760;
+    --essential-negative: #e91429;
+    --essential-warning: #ffa42b;
+    --essential-positive: #1ed760;
+    --essential-announcement: #0d72ea;
+    --decorative-base: #fff;
+    --decorative-subdued: #292929;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 1.6rem;
+    line-height: 1.5;
+
+    overflow-y: overlay;
+}
+
+// Scrollbar CSS
+html *::-webkit-scrollbar {
+    border-radius: 0;
+    width: 4px;
+}
+
+html *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+html *::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+button,
+input,
+[tabindex] {
+    // outline: none;
+    border: none;
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+// Fonts emmbeded
+
+// Custom tippy tooltip
+body {
+    .tippy-box {
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.6rem;
+        line-height: 2.2rem;
+        background-color: rgba(84, 84, 84, 0.92);
+    }
+
+    .tippy-arrow {
+        color: rgba(84, 84, 84, 0.92);
+    }
+
+    .tippy-content {
+        padding: 8px 9px;
+    }
+
+    .tippy-box[data-placement^='bottom'] > .tippy-arrow:before {
+        top: -8px;
+    }
+}

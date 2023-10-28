@@ -1,10 +1,14 @@
-// eslint-disable-next-line react/prop-types
+import PropType from 'prop-types';
+
 function HeaderOnly({ children }) {
-     return (<div>
-          <div>
-          <div  >{children}</div>
-          </div>
-     </div>  );
+    return (
+        <>
+            <div>{children}</div>
+        </>
+    );
 }
+HeaderOnly.propTypes = {
+    children: PropType.node.isRequired,
+};
 
 export default HeaderOnly;

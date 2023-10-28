@@ -1,0 +1,23 @@
+.containers {
+    height: 100vh;
+    // height: 100%;
+    overflow: hidden;
+    color: aliceblue;
+    display: grid;
+    grid-template:
+        'nav header header '
+        'nav article  article '
+        'nav footer footer ';
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 5fr auto;
+    background-color: #000;
+    min-height: 100%;
+    padding: 8px;
+    position: relative;
+    width: 100%;
+    gap: 8px;
+}
+
+article {
+    grid-area: article;
+}
