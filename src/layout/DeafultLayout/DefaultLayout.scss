@@ -7,7 +7,7 @@
     grid-template:
         'nav header header '
         'nav article  article '
-        'nav footer footer ';
+        'footer footer footer ';
     grid-template-columns: auto 1fr;
     grid-template-rows: auto 5fr auto;
     background-color: #000;

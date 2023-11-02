@@ -4,7 +4,6 @@
     -webkit-app-region: no-drag;
     flex-grow: 1;
     min-width: 0;
-    pointer-events: none;
 }
 
 .search-flex {
@@ -15,18 +14,17 @@
     display: -ms-flexbox;
     display: flex;
     gap: 8px;
-    pointer-events: none;
 }
 .search-relative {
-    font-size: 1.9rem;
+    font-size: 1.8rem;
     flex: 0 1 500px;
     position: relative;
     .search {
         background-color: #242424;
         border: 0;
         border-radius: 500px;
-        color: #fff !important;
-        height: 60px;
+        color: white !important;
+        height: 48px;
         padding: 6px 40px;
         text-overflow: ellipsis;
         width: 100%;
@@ -41,7 +39,6 @@
         -webkit-box-align: center;
         align-items: center;
         bottom: 0;
-        display: -webkit-box;
         display: flex;
         pointer-events: none;
         position: absolute;
@@ -51,6 +48,7 @@
         left: 10px;
     }
     .icon-clear {
+        pointer-events: painted;
         right: 16px;
     }
 }

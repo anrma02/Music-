@@ -62,18 +62,18 @@ function Header() {
 
     return (
         <header className={cx('header')}>
-            <>
-                <div className={cx('icon')}>
-                    <button>
-                        <FontAwesomeIcon icon={faChevronLeft} />
-                    </button>
-                    <button>
-                        <FontAwesomeIcon icon={faChevronRight} />
-                    </button>
-                </div>
 
-                <SearchValue />
-            </>
+            <div className={cx('icon')}>
+                <button>
+                    <FontAwesomeIcon icon={faChevronLeft} />
+                </button>
+                <button>
+                    <FontAwesomeIcon icon={faChevronRight} />
+                </button>
+            </div>
+
+
+            <SearchValue />
 
             {account ? (
                 <div ref={menuRef}>
