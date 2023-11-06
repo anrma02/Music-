@@ -1,55 +1,42 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
-import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 import style from './SearchValue.module.scss';
 import axios from 'axios';
+import { SearchContext } from '~/Context/SearchProvider';
 
 
 const cx = classNames.bind(style);
 
 function SearchValue() {
-    const [searchValue, setSearchValue] = useState('');
+    const { searchValue, setSearchValue, setSearchResults, isLoading, fetchData } = useContext(SearchContext);
 
-    const [searchResults, setSearchResults] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+
     const inputRef = useRef(null);
+    const isSearchPage = useLocation().pathname === '/search';
 
-    const handleSearch = useCallback(async () => {
-        try {
-            setIsLoading(true);
-            const response = await axios.get(`http://localhost:5000/getMusic/search?q=${searchValue}&type=album`);
-            const result = await response.data.items;
-            setSearchResults(result);
-            console.log("🚀 ~ file: SearchValue.jsx:27 ~ handleSearch ~ response:", result);
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }, [searchValue])
-    useEffect(() => {
 
-        handleSearch()
-    }, [handleSearch])
 
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+        fetchData();
     };
 
-    const isSearchPage = useLocation().pathname === '/search';
-
-    const handleInputChange = (event) => {
-        setSearchValue(event.target.value); // Lưu giá trị nhập vào state searchQuery
+    const handleInputChange = (e) => {
+        const searchValue = e.target.value;
+        if (!searchValue.startsWith(' ')) {
+            setSearchValue(searchValue);
+        }
     };
-
 
     const handleClear = () => {
         setSearchValue('');
-        // setSearchResults([]);
+        setSearchResults([]);
         inputRef.current.focus();
     };
 
@@ -79,8 +66,8 @@ function SearchValue() {
                                 !!searchValue && !isLoading && (<button onClick={handleClear}>
                                     <FontAwesomeIcon icon={faTimes} />
                                 </button>)
-                            }
-                        </div     >
+                            }  {isLoading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
+                        </div>
                     </div>
                 </div>
             </div>

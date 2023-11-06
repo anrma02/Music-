@@ -9,9 +9,11 @@ import SearchProvider from '~/Context/SearchProvider';
 function DefaultLayout({ children }) {
     return (
         <div className="containers">
-            <Header />
-            <Navbar />
-            <SearchProvider> <article>{children}</article></SearchProvider>
+            <SearchProvider>
+                <Header />
+                <Navbar />
+                <article>{children}</article>
+            </SearchProvider>
             <Footer />
         </div>
     );

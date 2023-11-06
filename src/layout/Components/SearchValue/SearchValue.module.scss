@@ -47,8 +47,20 @@
     .icon-search {
         left: 10px;
     }
-    .icon-clear {
+    .icon-clear,
+    .loading {
         pointer-events: painted;
         right: 16px;
+    }
+}
+.loading {
+    animation: spinner 0.8s linear infinite;
+}
+@keyframes spinner {
+    from {
+        transform: translateY(-50%) rotate(0);
+    }
+    to {
+        transform: translateY(-50%) rotate(360deg);
     }
 }
