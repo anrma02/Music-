@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { faSearch, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 import style from './SearchValue.module.scss';
-import axios from 'axios';
 import { SearchContext } from '~/Context/SearchProvider';
 
 
@@ -14,13 +12,8 @@ const cx = classNames.bind(style);
 
 function SearchValue() {
     const { searchValue, setSearchValue, setSearchResults, isLoading, fetchData } = useContext(SearchContext);
-
-
     const inputRef = useRef(null);
     const isSearchPage = useLocation().pathname === '/search';
-
-
-
 
     const handleSubmit = (event) => {
         event.preventDefault();

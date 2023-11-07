@@ -9,6 +9,8 @@ function SearchProvider({ children }) {
      const [searchValue, setSearchValue] = useState('');
      const [searchResults, setSearchResults] = useState([]);
      const [isLoading, setIsLoading] = useState(false);
+     const [searchType, setSearchType] = useState([0])
+
      const debounce = useDebounce(searchValue, 500);
 
 
@@ -22,9 +24,10 @@ function SearchProvider({ children }) {
 
                try {
                     const response = await axios.get(
-                         `http://localhost:5000/getMusic/search?q=${debounce}&type=album`
+                         `http://localhost:5000/getMusic/search?q=${debounce}&type=${searchType}`
                     );
-                    const result = response.data.items;
+                    const result = response.data[`${searchType}s`]?.items || [];
+
                     console.log("🚀 fetchData ~ result:", result);
                     setSearchResults(result);
                     setIsLoading(false);
@@ -47,6 +50,8 @@ function SearchProvider({ children }) {
                searchValue,
                setSearchValue,
                fetchData,
+               searchType,
+               setSearchType
           }}>{children}</SearchContext.Provider>);
 }
 

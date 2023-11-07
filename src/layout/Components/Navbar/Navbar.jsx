@@ -6,6 +6,7 @@ import Menu from './Menu';
 import MenuItems from './Menu/MenuItems';
 import style from './Navbar.module.scss';
 import { HomeIcon, HomeIconActive, LogoIcon, SearchIcon, SearchIconActive } from '~/components/Icon';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(style);
 function Navbar() {
@@ -16,10 +17,10 @@ function Navbar() {
             <div>
                 <ul className={cx('nav-item')}>
                     {AccountUser ? (
-                        <div className={cx('logo')}>
-                            {' '}
+                        <Link to={config.routes.home} className={cx('logo')}>
+
                             <LogoIcon />
-                        </div>
+                        </Link>
                     ) : (
                         ''
                     )}
