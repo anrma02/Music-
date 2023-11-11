@@ -1,16 +1,20 @@
 import classNames from "classnames/bind";
 import React from "react";
+import Tippy from '@tippyjs/react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
 
 import { SearchContext } from "~/Context/SearchProvider";
 import TrackList from "~/components/TabSearch/TabList/TrackList";
 import TabSearch from "~/components/TabSearch/TabSearch";
 import style from "./Search.module.scss";
+import styles from '~/components/TabSearch/TabList/TabList.scss';
 
-const cx = classNames.bind(style);
+const cx = classNames.bind(style, styles);
 
 
 function SearchPage() {
-    const { searchResults, searchValue, isLoading, searchType, setSearchType } = React.useContext(SearchContext);
+    const { searchResults, searchValue, searchType, setSearchType } = React.useContext(SearchContext);
     const [activeTab, setActiveTab] = React.useState(0);
 
     const tabs = [
@@ -22,9 +26,6 @@ function SearchPage() {
         { id: 6, label: 'Profiles', value: 'user' },
         { id: 7, label: 'Genres & Moods', value: 'genre' },
     ];
-
-
-
 
     return <>
         {
@@ -40,11 +41,38 @@ function SearchPage() {
                             }}
                             searchType={searchType}
                         />
+
                     </div>
-                </div>
-            ) : (
-                <div>
+
+                    <>
+                        {searchType === "track"
+                            && <div className={cx("tables")}>
+                                <div className={cx("table-grid")}>
+                                    <div>#</div>
+                                    <div> Title</div>
+                                    <div> Album</div>
+                                    <Tippy
+                                        placement="top-start"
+                                        content="Times"
+                                        className={cx("text-white text-sm")}
+                                        offset={[60, 0]}
+                                        delay={[10, 10]}
+                                    >
+                                        <div className={cx("flex justify-end items-center w-[120px]")}>
+                                            <FontAwesomeIcon icon={faClock} />
+                                        </div>
+                                    </Tippy>
+                                </div>
+                            </div >
+                        }
+                    </>
+
                     {searchType === "track" && <TrackList data={searchResults} />}
+
+                </div >
+            ) : (
+                <div  >
+                    s
                 </div>
             )
         }
