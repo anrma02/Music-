@@ -1,18 +1,18 @@
+import React, { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
-import Proptypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
-
 import useDebounce from '~/Hook/useDebounce';
+
 export const SearchContext = React.createContext();
 
-function SearchProvider({ children }) {
+const SearchProvider = ({ children }) => {
      const [searchValue, setSearchValue] = useState('');
      const [searchResults, setSearchResults] = useState([]);
      const [isLoading, setIsLoading] = useState(false);
-     const [searchType, setSearchType] = useState([0])
-
+     const [searchType, setSearchType] = useState([0]);
+     const [page, setPage] = useState(1);
+     const limit = 5;
      const debounce = useDebounce(searchValue, 500);
-
 
      const fetchData = useCallback(
           async function () {
@@ -20,6 +20,7 @@ function SearchProvider({ children }) {
                     setSearchResults([]);
                     return;
                }
+
                setIsLoading(true);
 
                const options = {
@@ -28,8 +29,9 @@ function SearchProvider({ children }) {
                     params: {
                          q: debounce,
                          type: searchType,
+                         page: page,
+                         limit: limit,
                     },
-
                };
 
                try {
@@ -38,35 +40,74 @@ function SearchProvider({ children }) {
 
                     console.log("🚀 results:", results);
 
+                    // Check if there are more results to fetch
+                    if (results.length > 0) {
+                         setSearchResults((prevResults) => {
+                              if (Array.isArray(prevResults)) {
+                                   return [...prevResults, ...results];
+                              } else {
+                                   return results;
+                              }
+                         });
 
-                    setSearchResults(results);
+                         setPage((prevPage) => prevPage + 1);
+                    }
+
                     setIsLoading(false);
                } catch (error) {
                     setIsLoading(false);
-                    console.error("Error fetching data: ", error);
+                    console.error('Error fetching data: ', error);
                     setSearchResults(null);
                }
+          },
+          [debounce, searchType, page]
+     );
 
-          }, [debounce, searchType]);
+     const handleScroll = useCallback(() => {
+          const isNearBottom =
+               window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+          if (isNearBottom) {
+               setPage((prevPage) => prevPage + 1);
+          }
+     }, []);
 
-     useEffect(() => { fetchData() }, [fetchData, searchType])
+     useEffect(() => {
+          fetchData();
+     }, [fetchData]);
 
-     return (<SearchContext.Provider
-          value={{
-               searchResults,
-               setSearchResults,
-               isLoading,
-               setIsLoading,
-               searchValue,
-               setSearchValue,
-               fetchData,
-               searchType,
-               setSearchType
-          }}>{children}</SearchContext.Provider>);
-}
+     useEffect(() => {
+          window.addEventListener('scroll', handleScroll);
+          return () => {
+               window.removeEventListener('scroll', handleScroll);
+          };
+     }, [handleScroll]);
+     useEffect(() => {
+          if (searchValue !== debounce) {
+               setPage(1);
+          }
+     }, [searchValue, debounce]);
+
+     return (
+          <SearchContext.Provider
+               value={{
+                    searchResults,
+                    setSearchResults,
+                    isLoading,
+                    setIsLoading,
+                    searchValue,
+                    setSearchValue,
+                    fetchData,
+                    searchType,
+                    setSearchType,
+               }}
+          >
+               {children}
+          </SearchContext.Provider>
+     );
+};
 
 SearchProvider.propTypes = {
-     children: Proptypes.node.isRequired
-}
+     children: PropTypes.node.isRequired,
+};
 
 export default SearchProvider;

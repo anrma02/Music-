@@ -8,7 +8,7 @@ import { SearchContext } from "~/Context/SearchProvider";
 import TrackList from "~/components/TabSearch/TabList/TrackList";
 import TabSearch from "~/components/TabSearch/TabSearch";
 import style from "./Search.module.scss";
-import styles from '~/components/TabSearch/TabList/TabList.scss';
+import styles from '~/components/TabSearch/TabList/TabList.scss?inline';
 
 const cx = classNames.bind(style, styles);
 
