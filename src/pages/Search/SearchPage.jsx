@@ -3,6 +3,7 @@ import React from "react";
 import Tippy from '@tippyjs/react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from 'react-router-dom';
 
 import { SearchContext } from "~/Context/SearchProvider";
 import TrackList from "~/components/TabSearch/TabList/TrackList";
@@ -16,6 +17,7 @@ const cx = classNames.bind(style, styles);
 function SearchPage() {
     const { searchResults, searchValue, searchType, setSearchType } = React.useContext(SearchContext);
     const [activeTab, setActiveTab] = React.useState(0);
+    const navigate = useNavigate();
 
     const tabs = [
         { id: 1, label: 'All', value: 'multi' },
@@ -38,6 +40,7 @@ function SearchPage() {
                             onChange={(index) => {
                                 setActiveTab(index);
                                 setSearchType(tabs[index].value);
+                                navigate(`/search?q=${searchValue}&type=${tabs[index].value}`);
                             }}
                             searchType={searchType}
                         />

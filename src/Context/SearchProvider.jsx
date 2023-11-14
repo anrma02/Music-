@@ -11,7 +11,7 @@ const SearchProvider = ({ children }) => {
      const [isLoading, setIsLoading] = useState(false);
      const [searchType, setSearchType] = useState([0]);
      const [page, setPage] = useState(1);
-     const limit = 5;
+     const limit = 10;
      const debounce = useDebounce(searchValue, 500);
 
      const fetchData = useCallback(
@@ -25,7 +25,7 @@ const SearchProvider = ({ children }) => {
 
                const options = {
                     method: 'GET',
-                    url: 'http://localhost:5000/getMusic/search/',
+                    url: 'http://localhost:8000/getMusic/search/',
                     params: {
                          q: debounce,
                          type: searchType,
