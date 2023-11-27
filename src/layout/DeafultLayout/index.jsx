@@ -12,7 +12,9 @@ function DefaultLayout({ children }) {
             <SearchProvider>
                 <Header />
                 <Navbar />
-                <article>{children}</article>
+                <article>
+                    {children}
+                </article>
             </SearchProvider>
             <Footer />
         </div>

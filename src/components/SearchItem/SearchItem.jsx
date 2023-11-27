@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Image from '~/assest/image';
-import { Link } from 'react-router-dom';
 
 const baseUrl = 'http://localhost:8000/';
 
@@ -17,7 +17,7 @@ function millisecondsToMinutesAndSeconds(milliseconds) {
      const totalSeconds = Math.floor(milliseconds / 1000);
      const seconds = totalSeconds % 60;
      const minutes = Math.floor(totalSeconds / 60);
-     return `${minutes}:${formatTimeComponent(seconds)}  `;
+     return `${minutes}:${formatTimeComponent(seconds)}`;
 }
 
 function SearchItem({ data, index }) {
@@ -55,15 +55,17 @@ function SearchItem({ data, index }) {
                               />
                               <div className={'ml-[16px]'}>
                                    <div className={'flex items-center w-[200px] overflow-auto font-semibold text-white '}>
-                                        <Link to={`/detail/${data._id}`}>  {data?.name}</Link>
+                                        <Link to={`/detail/track/${data._id}`}>  {data?.name}</Link>
                                    </div>
-                                   <span className={'flex items-center text-[12px] text-[#dedede] font-medium '}>
-                                        <Link to={`/detail/${data?.artist[0]._id}`}>  {data?.artist && data?.artist.length > 0 ? data?.artist[0].name : ''}</Link>
-                                   </span>
+                                   <Link to={`/detail/${data?.artist[0]._id}`}>
+                                        <span className={'flex items-center text-[12px] text-[#dedede] font-medium hover:decoration-solid'}>
+                                             {data?.artist && data?.artist.length > 0 ? data?.artist[0].name : ''}
+                                        </span>
+                                   </Link>
                               </div>
                          </div>
                     </>
-                    <div className="flex text-[#B3B3B3] font-medium">{data.album?.name}</div>
+                    <div className="flex text-[#B3B3B3] font-medium"> {data.album?.name}</div>
                     <div className="flex justify-end w-[130px] text-[#B3B3B3] font-medium">
                          {millisecondsToMinutesAndSeconds(data.duration)}
                     </div>

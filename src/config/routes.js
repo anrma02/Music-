@@ -1,7 +1,7 @@
 const routes = {
     home: '/',
     search: '/search',
-    detail: '/detail/:id',
+    detail: '/detail/track/:id',
 };
 
 export default routes;

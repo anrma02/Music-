@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -12,7 +12,7 @@ function TrackList({ data, fetchData }) {
      const [isFetching, setIsFetching] = useState(false);
 
 
-     const handleScroll = useContext(function () {
+     const handleScroll = useCallback(() => {
           const windowHeight = window.innerHeight;
           const documentHeight = document.documentElement.scrollHeight;
           const scrollTop = window.scrollY;
@@ -20,13 +20,16 @@ function TrackList({ data, fetchData }) {
           if (windowHeight + scrollTop >= documentHeight - 100 && !isFetching) {
                setIsFetching(true);
           }
-     }, []);
+
+     }, [isFetching]);
+
      useEffect(() => {
           window.addEventListener('scroll', handleScroll);
           return () => {
                window.removeEventListener('scroll', handleScroll);
           };
      }, [handleScroll]);
+
 
      useEffect(() => {
           if (isFetching) {
@@ -48,8 +51,10 @@ function TrackList({ data, fetchData }) {
 }
 
 TrackList.propTypes = {
-     data: PropTypes.array.isRequired,
+     data: PropTypes.arrayOf(PropTypes.shape({
+          _id: PropTypes.string.isRequired,
+
+     })),
      fetchData: PropTypes.func.isRequired,
 };
-
 export default TrackList;

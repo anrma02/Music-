@@ -6,6 +6,7 @@ import config from '../config';
 import Home from '../pages/Home/HomePage';
 import Search from '../pages/Search/SearchPage';
 import DetailPage from '~/pages/Detail/DetailPage';
+
 // Public routes
 
 const publicRoutes = [
