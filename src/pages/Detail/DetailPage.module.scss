@@ -23,7 +23,7 @@
         position: absolute;
         top: 0;
         width: 100%;
-        background-color: rgb(104, 152, 176);
+        // background-color: rgb(104, 152, 176);
     }
     &::after {
         content: '';
@@ -50,6 +50,7 @@
     text-align: left;
     width: 100%;
     word-break: break-word;
+
     h1 {
         box-sizing: border-box;
         -webkit-tap-highlight-color: transparent;
@@ -57,11 +58,11 @@
         margin: 0.08em 0px 0.12em;
         visibility: visible;
         width: 100%;
-        font-size: 6rem;
+        font-size: 4rem;
         font-weight: 900;
         font-family: var(
             --font-family,
-            CircularSpTitle,
+            CircularSp,
             CircularSpTitle-Tall,
             CircularSp-Arab,
             CircularSp-Hebr,

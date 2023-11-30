@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 
 import './TabList.scss';
 
-import SearchItem from '~/components/SearchItem';
+import TrackItem from '~/components/ListItem/TrackItem';
+
 
 
 function TrackList({ data, fetchData }) {
@@ -39,11 +40,12 @@ function TrackList({ data, fetchData }) {
           }
      }, [isFetching, fetchData]);
 
+
      return (
           <div style={{ position: 'sticky', height: '490px', overflowY: 'auto' }}>
                <div className={'px-[15px]'}>
                     {data?.map((item, index) => (
-                         <SearchItem key={item._id} data={item} index={index} />
+                         <TrackItem key={item._id} data={item} index={index} />
                     ))}
                </div>
           </div>
@@ -55,6 +57,6 @@ TrackList.propTypes = {
           _id: PropTypes.string.isRequired,
 
      })),
-     fetchData: PropTypes.func.isRequired,
+     fetchData: PropTypes.any,
 };
 export default TrackList;

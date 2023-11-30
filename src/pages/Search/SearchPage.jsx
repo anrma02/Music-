@@ -11,6 +11,7 @@ import TabSearch from "~/components/TabSearch/TabSearch";
 import style from "./Search.module.scss";
 import styles from '~/components/TabSearch/TabList/TabList.scss?inline';
 import AlbumList from "~/components/TabSearch/TabList/AlbumList";
+import ArtistsList from "~/components/TabSearch/TabList/ArtistList";
 
 const cx = classNames.bind(style, styles);
 
@@ -70,13 +71,15 @@ function SearchPage() {
                             </div >
                         }
                     </>
-
+                    {/* {searchType === "multi" && <TrackList data={searchResults} />} */}
                     {searchType === "track" && <TrackList data={searchResults} />}
                     {searchType === "album" && <AlbumList data={searchResults} />}
+                    {searchType === "artist" && <ArtistsList data={searchResults} />}
+
                 </div >
             ) : (
                 <div  >
-                    s
+                    Search Page
                 </div>
             )
         }
@@ -85,4 +88,3 @@ function SearchPage() {
 
 export default SearchPage;
 
-// <Search key={items.id} data={items}/>

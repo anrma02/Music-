@@ -20,7 +20,7 @@ function millisecondsToMinutesAndSeconds(milliseconds) {
      return `${minutes}:${formatTimeComponent(seconds)}`;
 }
 
-function SearchItem({ data, index }) {
+function TrackItem({ data, index }) {
      const [hoveredIndex, setHoveredIndex] = useState(null);
      return (
           <>
@@ -54,18 +54,18 @@ function SearchItem({ data, index }) {
                                    alt={data.name}
                               />
                               <div className={'ml-[16px]'}>
-                                   <div className={'flex items-center w-[200px] overflow-auto font-semibold text-white '}>
+                                   <div className={'flex items-center w-[250px] overflow-auto font-semibold text-white '}>
                                         <Link to={`/detail/track/${data._id}`}>  {data?.name}</Link>
                                    </div>
-                                   <Link to={`/detail/${data?.artist[0]._id}`}>
+                                   <Link to={`/detail/${data?.artist && data.artist.length > 0 ? data.artist[0]._id : ''}`}>
                                         <span className={'flex items-center text-[12px] text-[#dedede] font-medium hover:decoration-solid'}>
-                                             {data?.artist && data?.artist.length > 0 ? data?.artist[0].name : ''}
+                                             {data?.artist && data.artist.length > 0 ? data.artist[0].name : ''}
                                         </span>
                                    </Link>
                               </div>
                          </div>
                     </>
-                    <div className="flex text-[#B3B3B3] font-medium"> {data.album?.name}</div>
+                    <div className="flex text-[#B3B3B3] font-medium"> {data.album?.name ?? data.name}</div>
                     <div className="flex justify-end w-[130px] text-[#B3B3B3] font-medium">
                          {millisecondsToMinutesAndSeconds(data.duration)}
                     </div>
@@ -73,11 +73,11 @@ function SearchItem({ data, index }) {
           </>);
 }
 
-SearchItem.propTypes = {
+TrackItem.propTypes = {
      data: PropTypes.object.isRequired,
      index: PropTypes.number,
 
 
 }
 
-export default SearchItem;
+export default TrackItem;
