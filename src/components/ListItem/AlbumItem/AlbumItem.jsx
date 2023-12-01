@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Image from '~/assest/image';
 
-import style from '~/components/TabSearch/TabSearch.scss';
+import style from '~/components/TabSearch/TabSearch.scss?inline';
 
 
 const cx = classNames.bind(style);
@@ -18,7 +18,7 @@ function AlbumItem({ data }) {
                <div className={cx("album-grid")}>
                     <div className={cx("album--")}>
                          <div className={cx("album-grid")}>
-                              <Link to={`/detail/track/${data._id}`} >
+                              <Link to={`/detail/album/${data._id}`} >
                                    <div className={cx("album-card")}>
                                         <div className={cx("album-image")}  >
                                              <div>

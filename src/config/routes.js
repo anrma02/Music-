@@ -1,7 +1,8 @@
 const routes = {
     home: '/',
     search: '/search',
-    detail: '/detail/track/:id',
+    trackdetail: '/detail/track/:id',
+    albumdetail: '/detail/album/:id',
 };
 
 export default routes;

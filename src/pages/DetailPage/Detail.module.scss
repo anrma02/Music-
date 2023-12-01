@@ -1,10 +1,15 @@
 .detail {
     min-height: calc(((100vh - 64px) - 90px) - 519px);
     scroll-behavior: smooth;
-    backdrop-filter: blur(10px);
+}
+.detail::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+    background-color: #c90a0a;
 }
 .detail_header {
     height: 30vh;
+
     max-height: 400px;
     min-height: 340px;
     color: #fff;
@@ -77,6 +82,7 @@
 .detail-main {
     padding: 24px 24px;
 }
+
 .icon-play {
     font-size: 1em;
     display: flex;
@@ -124,4 +130,53 @@
 
 .index {
     grid-area: index;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+.ff {
+    margin-top: 10px;
+    max-width: var(--content-max-width);
+    padding: 0 var(--content-spacing);
+    h1 {
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+}
+.aa {
+    display: flex;
+    justify-content: space-between;
+    width: 950px;
+    .lyric {
+        width: 300px;
+        span {
+            -webkit-box-align: start;
+            -ms-flex-align: start;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            align-items: flex-start;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-direction: column;
+            flex-direction: column;
+        }
+    }
+}
+.info-artist {
+    display: flex;
+    flex-wrap: wrap;
+    height: 10px;
+    padding: 10px;
+    font-size: 16px;
+    height: fit-content;
+    font-weight: 600;
+    :hover {
+        span {
+            text-decoration: underline;
+        }
+    }
 }

@@ -1,11 +1,4 @@
 {
-     "cSpell.enableFiletypes": [
-          "sql"
-     ],
-     "cSpell.words": [
-          "assest",
-          "fontawesome",
-          "fortawesome",
-          "tippyjs"
-     ]
+    "cSpell.enableFiletypes": ["sql"],
+    "cSpell.words": ["assest", "fontawesome", "fortawesome", "tippyjs"]
 }

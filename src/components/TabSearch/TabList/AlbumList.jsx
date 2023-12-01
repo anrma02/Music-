@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 
-import style from "./TabList.scss";
+import style from "./TabList.scss?inline";
 import AlbumItem from "~/components/ListItem/AlbumItem";
 
 

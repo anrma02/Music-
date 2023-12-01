@@ -1,7 +1,6 @@
 header {
     grid-area: header;
-    position: static;
-    top: 0;
+    z-index: 999;
 }
 .header {
     -webkit-box-align: center;
