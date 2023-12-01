@@ -21,16 +21,16 @@ function millisecondsToMinutesAndSeconds(milliseconds) {
      return `${minutes} minute ${(seconds)} second `;
 }
 
-// function formatTimeComponent(timeComponent) {
-//      return timeComponent.toString().padStart(2, '0');
-// }
+function formatTimeComponent(timeComponent) {
+     return timeComponent.toString().padStart(2, '0');
+}
 
-// function millisecondsToMinutesAndSeconds1(milliseconds) {
-//      const totalSeconds = Math.floor(milliseconds / 1000);
-//      const seconds = totalSeconds % 60;
-//      const minutes = Math.floor(totalSeconds / 60);
-//      return `${minutes}:${formatTimeComponent(seconds)}`;
-// }
+function millisecondsToMinutesAndSeconds1(milliseconds) {
+     const totalSeconds = Math.floor(milliseconds / 1000);
+     const seconds = totalSeconds % 60;
+     const minutes = Math.floor(totalSeconds / 60);
+     return `${minutes}:${formatTimeComponent(seconds)}`;
+}
 
 function TrackDetail() {
      const { id } = useParams();
@@ -39,18 +39,22 @@ function TrackDetail() {
 
      const fetchTrackData = useCallback(async () => {
           try {
-               const res = await axios.get(`http://localhost:8000/track/get_track_by_id/${id}`);
+               const res = await axios.get(`${baseUrl}track/get_track_by_id/${id}`);
                const result = res.data.items;
-
                console.log("🚀 ~ file: DetailPage.jsx:43 ~ fetchTrackData ~ result:", result);
 
-               setTrack(result);
+               // Fetch additional information about each track in the artist
+               const trackPromises = result.artist[0].tracks.map(async (trackId) => {
+                    const trackRes = await axios.get(`${baseUrl}track/get_track_by_id/${trackId}`);
+                    return trackRes.data.items;
+               });
+               const trackNames = await Promise.all(trackPromises);
+
+               setTrack({ ...result, trackNames });
           } catch (error) {
                console.log("Error fetching track data:", error);
           }
      }, [id]);
-
-
 
      useEffect(() => {
           fetchTrackData();
@@ -133,6 +137,18 @@ function TrackDetail() {
 
 
                                    </div>
+                              </div>
+                              <div >
+
+                                   {track.trackNames.map((items, index) => (
+
+                                        <div key={index} className={cx("detail--song")}>
+                                             <div className={cx("index")}> {index + 1}</div>
+                                             <div className={cx("Title")}>{items.name}</div>
+                                             <div className={cx("Time")}>{millisecondsToMinutesAndSeconds1(items.duration)}</div>
+                                        </div>
+                                   ))}
+
                               </div>
                          </div>
                     </div >
