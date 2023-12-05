@@ -5,8 +5,9 @@ import { TbPlayerTrackNext, TbPlayerTrackPrev } from 'react-icons/tb';
 import { IoRepeatSharp } from 'react-icons/io5'
 import Slider from '@mui/material/Slider';
 import { useTheme } from '@mui/material/styles';
+import { useDispatch } from 'react-redux';
 
-
+import { playPause } from "~/redux/Services/playerSlice";
 import style from './Footer.module.scss';
 import React from 'react';
 
@@ -18,69 +19,23 @@ function HandleButton() {
      const [isShuffle, setIsShuffle] = React.useState(false);
      const [isPlaying, setIsPlaying] = React.useState(false);
      const [currentSongIndex, setCurrentSongIndex] = React.useState(0);
+     const [songs, setSongs] = React.useState();
      const [position, setPosition] = React.useState(0);
-     const [songs, setSongs] = React.useState([
-          {
-               id: 1,
-               title: 'Chúng Ta Không Thuộc Về Nhau',
-               artist: 'Sơn Tùng M-TP',
-               url: 'https://youtu.be/bNp9pn0ni3I?si=olkYEysWeQ1tCReJ',
-               duration: '4:12',
-          },
-          {
-               id: 2,
-               title: 'Hãy Trao Cho Anh',
-               artist: 'Sơn Tùng M-TP',
-               url: 'https://youtu.be/xypzmu5mMPY?si=EgcH1jRmlLTY4Zya',
-               duration: '4:39',
-          },
-
-     ]);
      const duration = 180
+
+     const dispatch = useDispatch();
+
      //  audioRef.current?.duration || 0;
      const audioRef = React.useRef(null);
 
-
      const theme = useTheme();
+
      function formatDuration(value) {
           const minute = Math.floor(value / 60);
           const secondLeft = value - minute * 60;
           return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
      }
 
-
-
-     React.useEffect(() => {
-          const audio = audioRef.current;
-
-          const selectedSong = songs[currentSongIndex];
-          audio.src = selectedSong.url
-
-          if (isPlaying) {
-               audioRef.current.play();
-          } else {
-               audioRef.current.pause();
-          }
-
-          audioRef.current.addEventListener('timeupdate', () => {
-               setPosition(audioRef.current.currentTime);
-          });
-
-          audioRef.current.addEventListener('ended', () => {
-               handleNextSong();
-          });
-
-          return () => {
-
-               audio.removeEventListener('timeupdate', () => { });
-               audio.removeEventListener('ended', () => { });
-          };
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-     }, [currentSongIndex, isPlaying, songs]);
-
-     const handlePlay = () => {
-          setIsPlaying((prevIsPlaying) => !prevIsPlaying);
-     };
 
      const handleNextSong = () => {
           setCurrentSongIndex((prevIndex) => (prevIndex + 1) % songs.length);
@@ -110,19 +65,12 @@ function HandleButton() {
                          <BiShuffle className={cx('icon', { 'red': isRepeat })} />
                     </button>
 
-                    {/* audio */}
-                    <audio ref={audioRef} />
-                    {/*  */}
+
                     <button onClick={handlePreviousSong}>
                          <TbPlayerTrackPrev className={cx('icon')} />
                     </button>
 
-                    <button onClick={handlePlay}>
-                         {isPlaying ?
-                              <AiOutlinePauseCircle className={cx('icon')} />
-                              :
-                              <AiOutlinePlayCircle className={cx('icon')} />}
-                    </button>
+
 
                     <button onClick={handleNextSong} >
                          <TbPlayerTrackNext className={cx('icon')} />

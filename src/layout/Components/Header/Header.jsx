@@ -4,15 +4,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
+
 import style from './Header.module.scss';
 
 import Image from '~/assest/image';
 import SearchValue from '../SearchValue';
+import config from '~/config';
+import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(style);
 
 function Header() {
-    const account = true;
+    const account = useSelector((state) => state.auth.login.currentUser);
+
+    console.log("🚀 ~ file: Header.jsx:20 ~ Header ~ account:", account);
+
     const [isShowMenu, setIsShowMenu] = useState(false);
     const menuRef = useRef(null);
     const menuItems = [
@@ -77,7 +83,11 @@ function Header() {
 
             {account ? (
                 <div ref={menuRef}>
-                    <Image src="" onClick={handleShowMenu} alt="" className={cx('avt')} />
+
+                    <div onClick={handleShowMenu} className='flex  items-center rounded-[15px] h-[30px] bg-[#333333bc]  '>
+                        <Image src="" alt="" className={cx('avt')} />
+                        <span className='   min-w-min  pr-[10px]'>{account.data.lastname}</span>
+                    </div>
                     {isShowMenu && (
                         <div className={cx('menu')}>
                             <ul className={cx('menu-list')}>
@@ -92,8 +102,8 @@ function Header() {
                 </div>
             ) : (
                 <div className={cx('form')}>
-                    <button className={cx('signup-form')}>Sign Up</button>
-                    <button className={cx('login-form')}>Log in</button>
+                    <button className={cx('signup-form')}><Link to={config.routes.signup} >Sign Up</Link></button>
+                    <Link to={config.routes.login}>      <button className={cx('login-form')}>Log in</button></Link>
                 </div>
             )}
         </header>
