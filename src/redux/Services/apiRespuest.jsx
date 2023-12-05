@@ -37,7 +37,8 @@ export const getAllUsers = async (accessToken, dispatch) => {
      try {
           const res = await axios.get("http://localhost:8000/user/get_user/", {
                headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    // Authorization: `Bearer ${accessToken}`
+                    token: `Bearer ${accessToken}`
                }
           });
           dispatch(getUserSuccess(res.data))

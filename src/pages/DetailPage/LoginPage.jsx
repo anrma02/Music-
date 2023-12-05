@@ -18,7 +18,7 @@ function LoginPage() {
      const [password, setPassword] = useState("");
      const [showPass, setShowPass] = useState(false);
      const [error, setError] = useState('');
-     const [message, setMessage] = useState('');
+
      const dispatch = useDispatch();
      const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ function LoginPage() {
                return setError("Please enter password in the input")
           }
           setError("");
-          setMessage("")
+
           const newUser = {
                username: username,
                password: password,
