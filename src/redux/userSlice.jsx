@@ -3,20 +3,20 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
      name: "user",
      initialState: {
-          user: {
-               currentUser: null,
+          users: {
+               allUser: null,
                isFetching: false,
                error: false
-          }
+          },
+
      },
      reducers: {
           getUserStart: (state) => {
                state.user.isFetching = true;
           },
-
           getUserSuccess: (state, action) => {
                state.user.isFetching = false;
-               state.user.currentUser = action.payload
+               state.user.allUser = action.payload
           },
           getUserFailed: (state) => {
                state.user.isFetching = false;
@@ -27,6 +27,10 @@ const userSlice = createSlice({
 
 })
 
-export const { getUserFailed, getUserStart, getUserSuccess } = userSlice.actions;
+export const {
+     getUserFailed,
+     getUserStart,
+     getUserSuccess
+} = userSlice.actions;
 
 export default userSlice.reducer;

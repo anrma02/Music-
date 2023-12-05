@@ -5,6 +5,7 @@ const routes = {
     albumdetail: '/detail/album/:id',
     login: '/login',
     signup: '/signup',
+    admin: '/admin',
 };
 
 export default routes;

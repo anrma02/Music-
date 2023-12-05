@@ -10,6 +10,7 @@ import TrackDetail from '~/pages/DetailPage/TrackDetail';
 import AlbumDetail from '~/pages/DetailPage/AlbumDetail';
 import LoginPage from '~/pages/DetailPage/LoginPage';
 import SignUpPage from '~/pages/DetailPage/SignUpPage';
+import AdminPage from '~/pages/Admin/AdminPage';
 
 // Public routes
 
@@ -22,6 +23,8 @@ const publicRoutes = [
     { path: config.routes.signup, component: SignUpPage, layout: null }
 ];
 
-const privateRoutes = [];
+const privateRoutes = [
+    { path: config.routes.admin, component: AdminPage }
+];
 
 export { publicRoutes, privateRoutes };

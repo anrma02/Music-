@@ -1,11 +1,23 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { Fragment } from 'react';
 
 import { DefaultLayout } from '~/layout';
 
-import { publicRoutes } from '~/routers';
+import { privateRoutes, publicRoutes } from '~/routers';
+
+import { useSelector } from 'react-redux';
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
+
+
+
 
 function App() {
+    const isAdmin = useSelector((state) => state.auth.login?.currentUser?.data?.isAdmin === true);
+
+    const ProtectedRoute = () => {
+
+        return isAdmin ? <Outlet /> : <Navigate to="/404" />;
+    };
     return (
         <>
             <Router>
@@ -30,6 +42,21 @@ function App() {
                             />
                         );
                     })}
+
+                    <Route element={
+                        <ProtectedRoute isAdmin={isAdmin} />}>
+                        {privateRoutes.map((route, index) => {
+                            const Page = route.component;
+                            return (
+                                <Route
+                                    key={index}
+                                    path={route.path}
+                                    element={<Page />}
+                                />
+                            );
+                        })}
+                    </Route>
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Router>
         </>
