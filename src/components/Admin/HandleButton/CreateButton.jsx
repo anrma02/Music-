@@ -1,6 +1,6 @@
 import Tippy from "@tippyjs/react";
 import { IoMdCreate, IoIosCloseCircleOutline } from "react-icons/io";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import 'tippy.js/dist/tippy.css';
 
 
@@ -14,11 +14,7 @@ function CreateTrack() {
      const [isModalOpen, setIsModalOpen] = useState(false);
      const [message, setMessage] = useState('');
      const [artist, setArtist] = useState([]);
-     const [page, setPage] = useState(1);
-     const [loading, setLoading] = useState(false);
-     const [hasMore, setHasMore] = useState(true);
 
-     const dropdownRef = useRef(null);
 
      console.log("🚀 ~ file: CreateButton.jsx:17 ~ CreateTrack ~ artist:", artist);
 
@@ -106,34 +102,6 @@ function CreateTrack() {
                artist: selectedArtistId,
           });
      };
-
-     const handleIntersection = (entries) => {
-          const target = entries[0];
-          if (target.isIntersecting && !loading && hasMore) {
-               // Load more artists when near the end
-               loadMoreArtists();
-          }
-     };
-
-     const loadMoreArtists = async () => {
-          try {
-               setLoading(true);
-               const res = await axios.get(`http://localhost:8000/artist/get_all_artist?page=${page + 1}&limit=7`);
-               const newArtists = res.data.items;
-
-               if (newArtists.length > 0) {
-                    setArtist((prevArtists) => [...prevArtists, ...newArtists]);
-                    setPage((prevPage) => prevPage + 1);
-               } else {
-                    setHasMore(false); // No more artists to load
-               }
-          } catch (error) {
-               console.error("Error loading more artists:", error);
-          } finally {
-               setLoading(false);
-          }
-     };
-
 
      useEffect(() => {
           const artistData = async () => {
