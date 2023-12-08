@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import classNames from "classnames/bind";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FaExclamationCircle } from "react-icons/fa";
 
 
@@ -20,7 +20,7 @@ function LoginPage() {
      const [password, setPassword] = useState("");
      const [showPass, setShowPass] = useState(false);
      const [error, setError] = useState('');
-     const msg = useSelector(state => state.auth?.msg);
+
      const dispatch = useDispatch();
      const navigate = useNavigate();
 
@@ -32,16 +32,14 @@ function LoginPage() {
                return setError("Please enter password in the input")
           }
           setError("");
-
           const newUser = {
                username: username,
                password: password,
-
           }
           try {
                await loginUser(newUser, dispatch, navigate);
           } catch (error) {
-               // Handle login error
+
                console.error("Login failed:", error);
           }
      }
@@ -80,13 +78,9 @@ function LoginPage() {
                                              </div>
 
                                         }
-                                        {msg &&
-                                             <div className=" bg-red-600 mb-[32px] justify-center rounded-[6px] h-[50px] flex items-center text-[14px] font-semibold text-white ">
-                                                  <FaExclamationCircle className="text-black text-[20px] pr-[5px]" />
-                                                  <span> {msg}</span>
-                                             </div>
 
-                                        }
+
+
                                         <div className="pb-4 c ">
                                              <form onSubmit={handleLogin} >
                                                   <div className="pb-[12px]">

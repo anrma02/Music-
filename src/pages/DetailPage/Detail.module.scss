@@ -82,6 +82,18 @@
 .detail-main {
     padding: 24px 24px;
 }
+.detail-song,
+.detail--song {
+    display: grid;
+    grid-template-columns: 0.1fr 2.5fr 0.1fr;
+    grid-auto-flow: row;
+    grid-template-areas: 'index Title Time';
+}
+.detail--song {
+    display: grid;
+    align-content: center;
+    height: 60px;
+}
 
 .icon-play {
     font-size: 1em;

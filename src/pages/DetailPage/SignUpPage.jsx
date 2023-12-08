@@ -23,6 +23,7 @@ function SignUpPage() {
      const navigate = useNavigate();
 
      const handleSignUp = (e) => {
+
           e.preventDefault();
           const newUser = {
                email: email,

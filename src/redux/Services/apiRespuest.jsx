@@ -1,6 +1,36 @@
-import axios from 'axios';
-import { logOutStart, loginFailure, loginStart, loginSuccess, registerStart } from '../authSlice';
+
+import { logOutFailure, logOutStart, loginFailure, loginStart, loginSuccess, logoutSuccess, registerStart } from '../authSlice';
 import { getUserFailed, getUserStart, getUserSuccess } from '../userSlice';
+import axios from 'axios';
+
+
+
+export const createTrack = async (trackData) => {
+    try {
+        const formData = new FormData();
+        formData.append('name', trackData.name);
+        formData.append('artist', trackData.artist);
+        formData.append('duration', trackData.duration);
+        formData.append('genre', trackData.genre);
+        formData.append('album', trackData.album);
+        formData.append('audio', trackData.audio);
+        formData.append('image', trackData.image);
+
+        const response = await axios.post('http://localhost:8000/track/create_track', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        return response.data
+    } catch (error) {
+        console.log(error);
+
+    }
+};
+
+
+
 
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
@@ -28,14 +58,13 @@ export const registerUser = async (user, dispatch, navigate) => {
     }
 };
 
-export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
+export const getAllUsers = async (accessToken, dispatch) => {
     dispatch(getUserStart());
     try {
-        const res = await axiosJWT.get('http://localhost:8000/user/get_user/', {
+        const res = await axios.get('http://localhost:8000/user/get_user/', {
             headers: {
-                Authorization: `Bearer ${accessToken}`,
-                // token: `Bearer ${accessToken}`
-                // token: `Bearer ${accessToken}`,
+                token: `Bearer ${accessToken}`,
+                // Authorization: `Bearer ${accessToken}`,
             },
         });
         dispatch(getUserSuccess(res.data));
@@ -47,15 +76,22 @@ export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
 export const logOut = async (dispatch, navigate, axios, accessToken) => {
     dispatch(logOutStart());
     try {
-        await axios.post('http://localhost:8000/auth/logout', {
-            headers: {
-                // token: `Bearer ${accessToken}`,
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-        dispatch(loginSuccess());
-        navigate('/login');
+        await axios.post('http://localhost:8000/auth/logout/', accessToken);
+        dispatch(logoutSuccess());
+        navigate('/');
     } catch (error) {
-        dispatch(loginFailure());
+        dispatch(logOutFailure());
     }
 };
+
+// export const getTrack = async (track, dispatch, page) => {
+//     dispatch(trackStart());
+//     try {
+//         const res = await axios.get(`http://localhost:8000/track/get_track?${page}`, track);
+//         dispatch(trackSuccess(res.data))
+//         dispatch(updatePagination({ page: res.data.page, totalPages: res.data.totalPages }));
+//     } catch (error) {
+//         dispatch(trackFailure())
+//     }
+// }
+

@@ -15,7 +15,6 @@ function App() {
     const isAdmin = useSelector((state) => state.auth.login?.currentUser?.data?.isAdmin === true);
 
     const ProtectedRoute = () => {
-
         return isAdmin ? <Outlet /> : <Navigate to="/404" />;
     };
     return (

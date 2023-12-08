@@ -4,9 +4,6 @@ import PropTypes from "prop-types"
 import "./TabSearch.scss";
 
 function TabSearch({ onChange, tabs, activeTab, }) {
-
-
-
      return (
           <div className={("px-6")}>
                {tabs.map((tab, index) => (

@@ -1,0 +1,24 @@
+.tab {
+    font-size: 16px;
+    font-weight: 400;
+    color: white;
+    background: #302f2f81;
+    border-radius: 30px;
+    margin: 0 var(--content-spacing);
+    padding: 0 var(--content-spacing);
+    height: 35px;
+    min-width: 80px;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+        height: 30px;
+        min-width: 70px;
+        overflow: hidden;
+
+        white-space: nowrap;
+    }
+}
+.active {
+    // border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.816);
+    color: rgb(0, 0, 0);
+}
