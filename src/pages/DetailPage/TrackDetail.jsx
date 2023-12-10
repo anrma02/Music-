@@ -41,16 +41,19 @@ function TrackDetail() {
           try {
                const res = await axios.get(`${baseUrl}track/get_track_by_id/${id}`);
                const result = res.data.items;
-               console.log("🚀 ~ file: DetailPage.jsx:43 ~ fetchTrackData ~ result:", result);
+               console.log("🚀 fetchTrackData ~ result:", result);
 
-               // Fetch additional information about each track in the artist
-               const trackPromises = result.artist[0].tracks.map(async (trackId) => {
-                    const trackRes = await axios.get(`${baseUrl}track/get_track_by_id/${trackId}`);
-                    return trackRes.data.items;
-               });
-               const trackNames = await Promise.all(trackPromises);
+               if (result.artist) {
+                    // Fetch additional information about each track in the artist
+                    const trackPromises = result.artist[0]?.tracks?.map(async (trackId) => {
+                         const trackRes = await axios.get(`${baseUrl}track/get_track_by_id/${trackId}`);
+                         return trackRes.data.items;
+                    });
 
-               setTrack({ ...result, trackNames });
+                    const trackNames = await Promise.all(trackPromises);
+
+                    setTrack({ ...result, trackNames });
+               }
           } catch (error) {
                console.log("Error fetching track data:", error);
           }

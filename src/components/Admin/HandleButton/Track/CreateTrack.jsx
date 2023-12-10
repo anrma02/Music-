@@ -1,11 +1,11 @@
-import Tippy from "@tippyjs/react";
+import HeadlessTippy from '@tippyjs/react/headless';
 import { IoMdCreate, IoIosCloseCircleOutline } from "react-icons/io";
 import { useCallback, useEffect, useState } from "react";
 import 'tippy.js/dist/tippy.css';
 
 
 import { createTrack } from "~/redux/Services/apiRespuest";
-import './admin.scss';
+import '../admin.scss';
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -15,21 +15,17 @@ function CreateTrack() {
      const [message, setMessage] = useState('');
      const [artist, setArtist] = useState([]);
 
-
-     console.log("🚀 ~ file: CreateButton.jsx:17 ~ CreateTrack ~ artist:", artist);
-
      const [trackData, setTrackData] = useState({
           name: '',
-          artist: '',
           duration: '',
           genre: '',
-          album: '',
           audio: null,
           image: null,
      });
 
      const openModal = () => {
           setIsModalOpen(true);
+
      };
 
      const closeModal = useCallback(() => {
@@ -66,7 +62,7 @@ function CreateTrack() {
      };
 
      const handleCreate = useCallback(async (e) => {
-          e.preventDefault(); // Prevent default form submission behavior
+          e.preventDefault();
 
           if (!trackData.name) {
                return setMessage("Please Title in the input");
@@ -86,6 +82,9 @@ function CreateTrack() {
 
           try {
                const response = await createTrack(trackData);
+
+               console.log("🚀 ~ file: CreateButton.jsx:86 ~ handleCreate ~ response:", response);
+
                toast.success(response.message, {
                     position: toast.POSITION.TOP_RIGHT,
                });
@@ -108,7 +107,7 @@ function CreateTrack() {
                try {
                     const res = await axios.get('http://localhost:8000/artist/get_all_artist');
                     const result = res.data;
-                    console.log("🚀CreateButton.jsx:17 ~ CreateTrack ~ result", result);
+
                     setArtist(result.items);
                } catch (error) {
                     console.log("🚀 CreateButton.jsx:94 ~ artistData ~ error:", error);
@@ -120,7 +119,8 @@ function CreateTrack() {
 
      return (
           <>
-               <Tippy
+
+               <HeadlessTippy
                     visible={isModalOpen}
                     onClickOutside={handleBlur}
                     interactive={true}
@@ -128,8 +128,9 @@ function CreateTrack() {
                     maxWidth={600}
                     offset={[150, 400]}
                     appendTo={() => document.body}
-                    content={
-                         <div className=" w-[500px] h-[550px] relative ">
+                    render={(attrs) => (
+
+                         <div tabIndex="-1" {...attrs} className="relative bg-[#292929be] w-[550px] rounded-[10px] ">
                               <button onClick={closeModal} className="w-full flex items-center justify-center ">
                                    <IoIosCloseCircleOutline className=" absolute top-0 right-0 text-[30px] font-bold text-[#e30000c0] hover:text-[#f32c2c] " />
                               </button>
@@ -142,7 +143,7 @@ function CreateTrack() {
                               }
 
                               <div className="w-full max-w-[600px]">
-                                   <form onSubmit={handleCreate} className=" bg-[#6766668e] rounded-[5px] shadow-md   px-8 pt-6 pb-8 mb-4">
+                                   <form onSubmit={handleCreate} className="  rounded-[5px] shadow-md   px-8 pt-6 pb-8 mb-4">
                                         <div className="mb-6">
                                              <label className="block text-white text-sm font-bold mb-2">Title</label>
                                              <input
@@ -226,13 +227,15 @@ function CreateTrack() {
                               </div>
 
                          </div>
-                    }
 
+                    )}
                >
                     <button onClick={openModal}>
                          <IoMdCreate />
                     </button>
-               </Tippy>
+               </HeadlessTippy >
+
+
           </>
      );
 }

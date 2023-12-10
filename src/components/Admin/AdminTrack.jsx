@@ -1,14 +1,17 @@
 
-
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IoIosAddCircle } from "react-icons/io";
 
+
+import './HandleButton/admin.scss'
 import Image from "~/assest/image";
-import CreateTrack from "./HandleButton/CreateButton";
-
-
+import CreateTrack from "./HandleButton/Track/CreateTrack";
+import UpdateButton from "./HandleButton/Track/UpdateTrack";
+import DeleteTrack from "./HandleButton/Track/DeleteTrack";
+import { deleteTrack } from "~/redux/Services/apiRespuest";
 
 
 const baseUrl = 'http://localhost:8000/';
@@ -17,8 +20,6 @@ function AdminTrack() {
      const [page, setPage] = useState(1);
      const [track, setTrack] = useState([]);
      const [totalPages, setTotalPages] = useState(0);
-
-     console.log("🚀 ~ file: AdminTrack.jsx:17 ~ AdminTrack ~ track:", track);
 
      const trackData = useCallback(async () => {
           try {
@@ -60,8 +61,8 @@ function AdminTrack() {
                return pageNumbersToRender;
           };
 
-          return getPageNumbersToRender().map((pageNumber, index) => (
-               <div key={index} className="isolate inline-flex -space-x-px rounded-md shadow-sm">
+          return getPageNumbersToRender().map((pageNumber) => (
+               <div key={pageNumber} className="isolate inline-flex -space-x-px rounded-md shadow-sm">
                     <div className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                     >
                          <div
@@ -76,6 +77,31 @@ function AdminTrack() {
           ));
      };
 
+     const handleUpdateTrack = (updatedTrackData) => {
+          const updatedTrackList = track.map((t) =>
+               t.id === updatedTrackData.id ? updatedTrackData : t
+          );
+          setTrack(updatedTrackList);
+     };
+
+     const handleDelete = async (trackId) => {
+          try {
+
+               const response = await deleteTrack(trackId);
+
+               toast.success(response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+               });
+               console.log('Track deleted successfully');
+
+
+               trackData();
+          } catch (error) {
+               console.error('Error deleting track:', error);
+
+               toast.error('Error deleting track. Please try again.');
+          }
+     };
 
 
      useEffect(() => {
@@ -92,45 +118,58 @@ function AdminTrack() {
           <>
                <div className="mx-[50px] h-full max-h-[550px]">
                     <ToastContainer />
-                    <div className="bg-[#1f1f1f] text-white  grid grid-cols-[50px_minmax(500px,_1000px)_500px_100px] gap-4 px-4 h-[50px] items-center text-[18px] rounded-[5px] font-bold ">
+                    <div className="bg-[#1f1f1f] text-white  grid grid-cols-[50px_minmax(500px,_1000px)_500px_100px] gap-4 px-4 h-[50px] items-center text-[18px] rounded-[5px] mb-[20px] font-bold ">
                          <div className="">#</div>
                          <div>Title</div>
                          <div>Album</div>
-                         <div className="hover:bg-sky-400 h-full rounded-[5px] flex justify-center ">
+
+                         <div className="hover:bg-sky-400  h-full rounded-[5px] flex justify-center ">
                               <CreateTrack />
                          </div>
+
                     </div>
-                    {
-                         track.map((item, index) => (
-                              <div className={`table-grid2`} key={index.id}>
-                                   <div className={'flex text-[17px] text-[#b3b3b3]'}>
-                                        {index + 1}
-                                   </div>
-                                   <>
-                                        <div className={'flex'}>
-                                             <Image
-                                                  className={'w-[40px] h-[40px]'}
-                                                  src={baseUrl + item.image.path}
-                                                  alt={item.name}
-                                             />
-                                             <div className={'ml-[16px]'}>
-                                                  <div className={'flex items-center w-[250px] overflow-auto font-semibold text-white '}>
-                                                       <span>{item.name}</span>
-                                                  </div>
-                                                  <span>
-                                                       <span className={'flex items-center text-[12px] text-[#dedede] font-medium hover:decoration-solid'}>
-                                                            {item.artist[0].name}
-                                                       </span>
-                                                  </span>
+                    {track.map((item, index) => (
+                         <div className=' grid grid-cols-[50px_minmax(500px,_1000px)_500px_150px] gap-4' key={index.id}>
+                              <div className={'flex text-[17px] text-[#b3b3b3]'}>
+                                   {index + 1}
+                              </div>
+                              <>
+                                   <div className={'flex'}>
+                                        <Image
+                                             className={'w-[40px] h-[40px]'}
+                                             src={baseUrl + item.image.path}
+                                             alt={item.name}
+                                        />
+                                        <div className={'ml-[16px]'}>
+                                             <div className={'flex items-center w-[250px] overflow-auto font-semibold text-white '}>
+                                                  <span>{item.name}</span>
                                              </div>
+                                             <span>
+                                                  <span className={'flex items-center text-[12px] text-[#dedede] font-medium hover:decoration-solid'}>
+                                                       {item.artist?.name}
+                                                  </span>
+                                             </span>
                                         </div>
-                                   </>
-                                   <div className="flex text-[#B3B3B3] font-medium">{item.album[0]?.name ?? item.name}</div>
-                                   <div className="flex justify-end w-[130px] text-[#B3B3B3] font-medium">
+                                   </div>
+                              </>
+                              <div className="flex text-[#B3B3B3] font-medium">{item.album[0]?.name ?? item.name}</div>
+                              <div className="flex justify-end w-[130px] text-[#B3B3B3] font-medium">
+                                   <div className="add">
+
+                                        <DeleteTrack trackId={item._id} trackName={item.name} onDelete={handleDelete} />
+
+                                        <button>
+                                             <IoIosAddCircle />
+                                        </button>
+                                        <UpdateButton trackId={item._id} onUpdate={handleUpdateTrack} />
+
+                                        <button>
+                                        </button>
 
                                    </div>
-                              </div >
-                         ))
+                              </div>
+                         </div >
+                    ))
                     }
                     <div className="text-white grid grid-cols-3 justify-center justify-items-center mt-[30px]   ">
                          <button
@@ -155,7 +194,7 @@ function AdminTrack() {
                               Next
                          </button>
                     </div>
-               </div>
+               </div >
           </>
      );
 }

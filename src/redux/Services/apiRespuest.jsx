@@ -1,5 +1,6 @@
 
 import { logOutFailure, logOutStart, loginFailure, loginStart, loginSuccess, logoutSuccess, registerStart } from '../authSlice';
+
 import { getUserFailed, getUserStart, getUserSuccess } from '../userSlice';
 import axios from 'axios';
 
@@ -30,6 +31,37 @@ export const createTrack = async (trackData) => {
 };
 
 
+export const updateTrack = async (trackData, trackId) => {
+
+    try {
+        const formData = new FormData();
+        formData.append("name", trackData.name);
+        formData.append("duration", trackData.duration);
+        formData.append("genre", trackData.genre);
+        formData.append('artist', trackData.artist);
+        formData.append("audio", trackData.audio);
+        formData.append("image", trackData.image);
+
+        const response = await axios.put(`http://localhost:8000/track/update_track/${trackId}`, formData, {
+
+        });
+        return response && response.data;
+
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const deleteTrack = async (trackId) => {
+    try {
+        const response = await axios.delete(`http://localhost:8000/track/detele_track/${trackId}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 export const loginUser = async (user, dispatch, navigate) => {

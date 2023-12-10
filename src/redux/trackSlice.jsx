@@ -3,25 +3,48 @@ import { createSlice } from '@reduxjs/toolkit';
 const trackSlice = createSlice({
      name: 'track',
      initialState: {
-          track: null,
-          error: null,
+          trackData: {
+               name: '',
+               duration: '',
+               artist: '',
+               genre: '',
+               audio: null,
+               image: null,
+               pending: false,
+               error: false,
+
+          },
      },
+
      reducers: {
-          createTrackStart: (state) => {
-               state.track = null;
-               state.error = null;
+          updateStart: (state) => {
+               state.trackData.pending = true;
+               state.trackData.error = false;
           },
-          createTrackSuccess: (state, action) => {
-               state.track = action.payload.track;
-               state.error = null;
+          updateError: (state) => {
+               state.trackData.pending = false;
+               state.trackData.error = true;
           },
-          createTrackError: (state, action) => {
-               state.track = null;
-               state.error = action.payload.error;
+          updateSuccess: (state, action) => {
+               state.trackData.pending = false;
+               state.trackData.error = false;
+               state.trackData.name = action.payload.name;
+               state.trackData.duration = action.payload.duration;
+               state.trackData.artist = action.payload.artist;
+               state.trackData.genre = action.payload.genre;
+               state.trackData.audio = action.payload.audio;
+               state.trackData.image = action.payload.image;
+
+
           },
+
      },
 });
 
-export const { createTrackStart, createTrackSuccess, createTrackError } = trackSlice.actions;
+export const {
+     updateStart,
+     updateError,
+     updateSuccess,
+} = trackSlice.actions;
 
 export default trackSlice.reducer;

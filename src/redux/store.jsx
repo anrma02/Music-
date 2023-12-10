@@ -14,7 +14,6 @@ import { combineReducers } from 'redux'
 
 import authReducer from './authSlice'
 import userReducer from './userSlice'
-import trackReducer from './trackSlice'
 
 // import playerReducer from './Services/playerSlice'
 
@@ -28,7 +27,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     auth: authReducer,
     users: userReducer,
-    trackPost: trackReducer
+
     // player: playerReducer
 })
 
