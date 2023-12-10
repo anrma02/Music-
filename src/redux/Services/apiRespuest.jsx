@@ -6,6 +6,29 @@ import axios from 'axios';
 
 
 
+export const createArtist = async ({ artistData }) => {
+    try {
+        const formData = new FormData();
+        formData.append('name', artistData.name);
+        formData.append('genre', artistData.genre);
+        formData.append('image', artistData.image);
+
+        const response = await axios.post('http://localhost:8000/artist/create_artist', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        console.log("🚀 ~ file: apiRespuest.jsx:22 ~ createArtist ~ response:", response);
+
+
+        return response.data
+    } catch (error) {
+
+        console.log("🚀 createArtist ~ error:", error);
+    }
+}
+
 export const createTrack = async (trackData) => {
     try {
         const formData = new FormData();
@@ -116,6 +139,8 @@ export const logOut = async (dispatch, navigate, axios, accessToken) => {
     }
 };
 
+
+
 // export const getTrack = async (track, dispatch, page) => {
 //     dispatch(trackStart());
 //     try {
@@ -126,4 +151,5 @@ export const logOut = async (dispatch, navigate, axios, accessToken) => {
 //         dispatch(trackFailure())
 //     }
 // }
+
 

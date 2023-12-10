@@ -2,12 +2,12 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import { IoMdCreate, IoIosCloseCircleOutline } from "react-icons/io";
 import { useCallback, useEffect, useState } from "react";
 import 'tippy.js/dist/tippy.css';
+import { toast } from "react-toastify";
+import axios from "axios";
 
 
 import { createTrack } from "~/redux/Services/apiRespuest";
 import '../admin.scss';
-import { toast } from "react-toastify";
-import axios from "axios";
 
 
 function CreateTrack() {
@@ -79,7 +79,6 @@ function CreateTrack() {
           if (!trackData.audio || !trackData.image) {
                return setMessage("Please upload a Track or Image.");
           }
-
           try {
                const response = await createTrack(trackData);
 
@@ -90,7 +89,10 @@ function CreateTrack() {
                });
                closeModal();
           } catch (error) {
-               toast.error(error.response.data.error);
+               console.error('Error creating artist:', error);
+               toast.error(`Error creating artist: ${error.message}`, {
+                    position: toast.POSITION.TOP_RIGHT,
+               });
           }
      }, [trackData, closeModal]);
 
