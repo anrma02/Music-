@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import classNames from "classnames/bind";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -8,6 +8,10 @@ import Image from "~/assest/image";
 import HandleCreateArtist from "./HandleButton/Artist/HandleCreateArtist";
 import './HandleButton/admin.scss';
 import style from './admin.module.scss'
+import HandleUpdateArtist from "./HandleButton/Artist/HandleUpdateArtist";
+
+import HandleDeleteArtist from "./HandleButton/Artist/HandleDeleteArtist";
+import { deleteArtist } from "~/redux/Services/apiRespuest";
 
 
 const baseUrl = 'http://localhost:8000/';
@@ -35,11 +39,34 @@ function AdminArtist() {
 
      useEffect(() => { }, [artist]);
 
+     const handleUpdateArtist = (updateArtist) => {
+          const updatedArtistList = artist.map((t) =>
+               t.id === updateArtist.id ? updateArtist : t
+          );
+          setArtist(updatedArtistList);
+     };
+
+     const handleDelete = async (trackId) => {
+          try {
+               const response = await deleteArtist(trackId);
+               toast.success(response.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+               });
+               console.log('Artist deleted successfully');
+               fetchArtist();
+          } catch (error) {
+               console.error('Error deleting track:', error);
+               toast.error(error.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+               });
+          }
+     };
+
      return (
           <>
 
 
-               <div className="mx-[100px] h-full max-h-[550px] overflow-x-scroll ">
+               <div className="mx-[100px] h-full max-h-[550px] overflow-x-scroll  ">
                     <ToastContainer />
                     <HandleCreateArtist />
 
@@ -50,11 +77,11 @@ function AdminArtist() {
                                         <div className=" p-2 rounded-2xl ">
                                              <Image
                                                   className={'w-full rounded-[5px] h-full max-h-[200px]'}
-                                                  src={baseUrl + item.image.path}
+                                                  src={baseUrl + item.image?.path}
                                                   alt={item.name}
                                              />
                                              <div className={'mt-[16px]  '}>
-                                                  <div className={'flex items-center justify-center   overflow-auto font-semibold text-white '}>
+                                                  <div className={'flex items-center justify-center overflow-auto font-semibold text-white '}>
                                                        <span>{item.name}</span>
                                                   </div>
 
@@ -62,10 +89,13 @@ function AdminArtist() {
                                         </div>
                                    </>
                                    <div className={cx('ho')}>
-                                        <div className={cx("add")}>
-                                             <button>ds</button>
-                                             <button>ddas</button>
-                                             ss
+                                        <div className="add">
+
+                                             <HandleDeleteArtist artistId={item._id} artistName={item.name} onDelete={handleDelete} />
+
+                                             <HandleUpdateArtist artistId={item._id} onUpdate={handleUpdateArtist} />
+
+                                             <button> </button>
                                         </div>
                                    </div>
                               </div>

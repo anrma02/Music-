@@ -1,12 +1,20 @@
 import HeadLessTippy from '@tippyjs/react/headless';
-import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { toast } from 'react-toastify';
+import { MdOutlineUpdate } from 'react-icons/md';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+
 
 import "tippy.js/dist/tippy.css";
 
-function HandleCreateArtist() {
+
+
+function HandleUpdateArtist({ onUpdate, artistId }) {
+
+     console.log("🚀 ~ file: HandleUpdateArtist.jsx:15 ~ HandleUpdateArtist ~ artistId:", artistId);
+
      const [isModalOpen, setIsModalOpen] = useState(false);
      const [message, setMessage] = useState('');
      const [artistData, setArtistData] = useState({
@@ -65,16 +73,11 @@ function HandleCreateArtist() {
                formData.append('genre', artistData.genre);
                formData.append('image', artistData.image);
 
-               const response = await axios.post('http://localhost:8000/artist/create_artist', formData, {
-                    headers: {
-                         'Content-Type': 'multipart/form-data',
-                    },
-               });
+               const response = await axios.put(`http://localhost:8000/artist/update_artist/${artistId}`, formData);
 
                console.log("🚀 ~ file: apiRespuest.jsx:22 ~ createArtist ~ response:", response);
-
-
-               toast.success(response.message, {
+               onUpdate({ ...artistData, id: artistId })
+               toast.success('Artist updated successfully!', {
                     position: toast.POSITION.TOP_RIGHT,
                })
           } catch (error) {
@@ -89,24 +92,23 @@ function HandleCreateArtist() {
 
 
 
-
-
      return (
           <>
+
                <HeadLessTippy
                     visible={isModalOpen}
                     onClickOutside={handleBlur}
                     interactive={true}
                     placement="auto"
                     maxWidth={600}
-                    offset={[10, 0]}
+                    offset={[350, 100]}
                     appendTo={() => document.body}
                     render={(attrs) => (
                          <div tabIndex="-1" {...attrs} className="relative bg-[#131313f7] w-[550px] rounded-[10px] ">
                               <button onClick={closeModal} className="w-full flex items-center justify-center ">
                                    <IoIosCloseCircleOutline className=" absolute top-0 right-0 text-[30px] font-bold text-[#e30000c0] hover:text-[#f32c2c] " />
                               </button>
-                              <h3 className="text-white font-bold mt-[20px] text-[24px] text-center mb-[20px] "> Create Track </h3>
+                              <h3 className="text-white font-bold mt-[20px] text-[24px] text-center mb-[20px] ">Update Artist </h3>
 
                               {message && (
                                    <div className="bg-red-600 mb-[32px] justify-center rounded-[6px] h-[50px] flex items-center text-[14px] font-semibold text-white ">
@@ -164,12 +166,21 @@ function HandleCreateArtist() {
                          </div>
                     )}
                >
-                    <div className="mb-[20px] z-30 relative " >
-                         <button onClick={openModal} className="text-white bg-blue-500 w-full max-w-[150px] h-[40px] hover:bg-blue-600">Create Artist</button>
-                    </div>
+
+                    <button onClick={openModal}>
+                         <MdOutlineUpdate />
+                    </button>
+
                </HeadLessTippy>
+
           </>
      );
 }
 
-export default HandleCreateArtist;
+HandleUpdateArtist.propTypes = {
+     onUpdate: PropTypes.func.isRequired,
+
+     artistId: PropTypes.string.isRequired,
+}
+
+export default HandleUpdateArtist;
