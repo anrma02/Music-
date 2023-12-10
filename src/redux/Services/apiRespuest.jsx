@@ -16,6 +16,27 @@ export const deleteArtist = async (artistId) => {
 }
 
 
+export const addTracksToArtist = async (artistId, selectedTracks) => {
+    try {
+        const response = await axios.post(`http://localhost:8000/artist/add_track_to_artist/${artistId}`, { selectedTracks });
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+
+            console.error('Server error:', error.response.data);
+        } else if (error.request) {
+
+            console.error('Request error:', error.request);
+        } else {
+
+            console.error('Request setup error:', error.message);
+        }
+        return { success: false, message: 'An error occurred while adding tracks to the artist.' };
+    }
+};
+
+
+
 export const createTrack = async (trackData) => {
     try {
         const formData = new FormData();

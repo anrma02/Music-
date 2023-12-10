@@ -76,6 +76,7 @@ function HandleUpdateArtist({ onUpdate, artistId }) {
                const response = await axios.put(`http://localhost:8000/artist/update_artist/${artistId}`, formData);
 
                console.log("🚀 ~ file: apiRespuest.jsx:22 ~ createArtist ~ response:", response);
+
                onUpdate({ ...artistData, id: artistId })
                toast.success('Artist updated successfully!', {
                     position: toast.POSITION.TOP_RIGHT,

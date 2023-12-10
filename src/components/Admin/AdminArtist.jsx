@@ -12,6 +12,7 @@ import HandleUpdateArtist from "./HandleButton/Artist/HandleUpdateArtist";
 
 import HandleDeleteArtist from "./HandleButton/Artist/HandleDeleteArtist";
 import { deleteArtist } from "~/redux/Services/apiRespuest";
+import HandleAddTrackToArtist from "./HandleButton/Artist/HandleAddTrackToArtist";
 
 
 const baseUrl = 'http://localhost:8000/';
@@ -53,7 +54,7 @@ function AdminArtist() {
                     position: toast.POSITION.TOP_RIGHT,
                });
                console.log('Artist deleted successfully');
-               fetchArtist();
+               fetchArtist()
           } catch (error) {
                console.error('Error deleting track:', error);
                toast.error(error.message, {
@@ -61,6 +62,9 @@ function AdminArtist() {
                });
           }
      };
+
+
+
 
      return (
           <>
@@ -92,7 +96,7 @@ function AdminArtist() {
                                         <div className="add">
 
                                              <HandleDeleteArtist artistId={item._id} artistName={item.name} onDelete={handleDelete} />
-
+                                             <HandleAddTrackToArtist artistId={item._id} />
                                              <HandleUpdateArtist artistId={item._id} onUpdate={handleUpdateArtist} />
 
                                              <button> </button>

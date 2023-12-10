@@ -64,17 +64,13 @@ function HandleCreateArtist() {
                formData.append('name', artistData.name);
                formData.append('genre', artistData.genre);
                formData.append('image', artistData.image);
-
-               const response = await axios.post('http://localhost:8000/artist/create_artist', formData, {
+               await axios.post('http://localhost:8000/artist/create_artist', formData, {
                     headers: {
                          'Content-Type': 'multipart/form-data',
                     },
                });
 
-               console.log("🚀 ~ file: apiRespuest.jsx:22 ~ createArtist ~ response:", response);
-
-
-               toast.success(response.message, {
+               toast.success('Artist create successfully ', {
                     position: toast.POSITION.TOP_RIGHT,
                })
           } catch (error) {
