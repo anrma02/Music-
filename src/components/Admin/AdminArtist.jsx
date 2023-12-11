@@ -68,12 +68,9 @@ function AdminArtist() {
 
      return (
           <>
-
-
                <div className="mx-[100px] h-full max-h-[550px] overflow-x-scroll  ">
                     <ToastContainer />
                     <HandleCreateArtist />
-
                     <div className=" text-white grid md:grid-cols-[200px_200px_200px_200px_200px_200px] gap-8  ">
                          {artist.map((item, index) => (
                               <div className=' bg-[#101010a5] h-[250px] w-[200px] relative hover:bg-[#46464648]' key={index.id}>

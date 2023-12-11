@@ -19,6 +19,7 @@ function CreateTrack() {
           name: '',
           duration: '',
           genre: '',
+
           audio: null,
           image: null,
      });
@@ -36,6 +37,7 @@ function CreateTrack() {
                duration: '',
                genre: '',
                album: '',
+
                audio: null,
                image: null,
           });
@@ -79,6 +81,8 @@ function CreateTrack() {
           if (!trackData.audio || !trackData.image) {
                return setMessage("Please upload a Track or Image.");
           }
+
+
           try {
                const response = await createTrack(trackData);
 
@@ -176,6 +180,7 @@ function CreateTrack() {
                                                   onChange={handleInputChange}
                                                   placeholder="Genre" />
                                         </div>
+
 
                                         <div className="mb-6">
                                              <label className="block text-white text-sm font-bold mb-2">Artist</label>

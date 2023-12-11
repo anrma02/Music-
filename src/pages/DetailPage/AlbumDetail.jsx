@@ -38,10 +38,10 @@ function AlbumDetail() {
 
      const fetchAlbumData = useCallback(async () => {
           try {
-               const res = await axios.get(`http://localhost:8000/album/get_album_by_id/${id}`);
-               const result = res.data.items;
+               const response = await axios.get(`http://localhost:8000/album/get_album_by_id/${id}`);
+               const result = response.data.items;
 
-               // console.log("🚀 ~ file: DetailPage.jsx:56 ~ fetchAlbumData ~ result:", result);
+               console.log("🚀 ~ file: DetailPage.jsx:56 ~ fetchAlbumData ~ result:", result);
 
                setAlbum(result);
           } catch (error) {

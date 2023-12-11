@@ -54,7 +54,7 @@ function AdminPage() {
                     </div>
                </header>
 
-               <main className="bg-[#000000] h-full max-h-[635px] " >
+               <main className="bg-[#000000] h-full max-h-[710px] " >
                     <div className=" p-[20px] grid grid-rows-1 grid-flow-col  max-w-[500px]   ">
                          <Tabs tabs={tab}
 

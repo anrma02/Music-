@@ -11,6 +11,7 @@ import AlbumDetail from '~/pages/DetailPage/AlbumDetail';
 import LoginPage from '~/pages/DetailPage/LoginPage';
 import SignUpPage from '~/pages/DetailPage/SignUpPage';
 import AdminPage from '~/pages/Admin/AdminPage';
+import ArtistDetail from '~/pages/DetailPage/ArtistDetail';
 
 // Public routes
 
@@ -20,7 +21,8 @@ const publicRoutes = [
     { path: config.routes.trackdetail, component: TrackDetail },
     { path: config.routes.albumdetail, component: AlbumDetail },
     { path: config.routes.login, component: LoginPage, layout: null },
-    { path: config.routes.signup, component: SignUpPage, layout: null }
+    { path: config.routes.signup, component: SignUpPage, layout: null },
+    { path: config.routes.artistdetail, component: ArtistDetail }
 ];
 
 const privateRoutes = [

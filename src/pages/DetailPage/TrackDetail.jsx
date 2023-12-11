@@ -143,7 +143,6 @@ function TrackDetail() {
                               <div >
 
                                    {track.trackNames.map((items, index) => (
-
                                         <div key={index} className={cx("detail--song")}>
                                              <div className={cx("index")}> {index + 1}</div>
                                              <div className={cx("Title")}>{items.name}</div>

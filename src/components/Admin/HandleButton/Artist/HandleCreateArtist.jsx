@@ -12,6 +12,7 @@ function HandleCreateArtist() {
      const [artistData, setArtistData] = useState({
           name: '',
           genre: '',
+          information: '',
           image: null,
      });
 
@@ -24,6 +25,7 @@ function HandleCreateArtist() {
           setArtistData({
                name: '',
                genre: '',
+               information: '',
                image: null,
           });
           setMessage('');
@@ -59,11 +61,16 @@ function HandleCreateArtist() {
           if (!artistData.image) {
                return setMessage("Please upload a Image.");
           }
+          if (!artistData.information) {
+               return setMessage("Please information in the input")
+          }
+
           try {
                const formData = new FormData();
                formData.append('name', artistData.name);
                formData.append('genre', artistData.genre);
                formData.append('image', artistData.image);
+               formData.append('information', artistData.information);
                await axios.post('http://localhost:8000/artist/create_artist', formData, {
                     headers: {
                          'Content-Type': 'multipart/form-data',
@@ -95,7 +102,7 @@ function HandleCreateArtist() {
                     interactive={true}
                     placement="auto"
                     maxWidth={600}
-                    offset={[10, 0]}
+                    offset={[10, -100]}
                     appendTo={() => document.body}
                     render={(attrs) => (
                          <div tabIndex="-1" {...attrs} className="relative bg-[#131313f7] w-[550px] rounded-[10px] ">
@@ -135,7 +142,16 @@ function HandleCreateArtist() {
                                                   placeholder="Genre"
                                              />
                                         </div>
-
+                                        <div className="mb-6">
+                                             <label className="block text-white text-sm font-bold mb-2">Genre</label>
+                                             <textarea
+                                                  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                                  type="text"
+                                                  name="information"
+                                                  value={artistData.information}
+                                                  onChange={handleInputChange}
+                                                  placeholder="information" />
+                                        </div>
                                         <div className="mb-6">
                                              <label className="block text-white text-sm font-bold mb-2">Image</label>
                                              <input
