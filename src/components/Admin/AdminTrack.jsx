@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { IoIosAddCircle } from "react-icons/io";
+
 
 
 import "react-toastify/dist/ReactToastify.css";
@@ -12,6 +12,8 @@ import CreateTrack from "./HandleButton/Track/CreateTrack";
 import UpdateButton from "./HandleButton/Track/UpdateTrack";
 import DeleteTrack from "./HandleButton/Track/DeleteTrack";
 import { deleteTrack } from "~/redux/Services/apiRespuest";
+import CreateLyric from "./HandleButton/Track/CreateLyric";
+import AddLyricToTrack from "./HandleButton/Track/AddLyricToTrack";
 
 
 const baseUrl = 'http://localhost:8000/';
@@ -158,13 +160,10 @@ function AdminTrack() {
 
                                         <DeleteTrack trackId={item._id} trackName={item.name} onDelete={handleDelete} />
 
-                                        <button>
-                                             <IoIosAddCircle />
-                                        </button>
+                                        <CreateLyric />
                                         <UpdateButton trackId={item._id} onUpdate={handleUpdateTrack} />
+                                        <AddLyricToTrack trackId={item._id} />
 
-                                        <button>
-                                        </button>
 
                                    </div>
                               </div>
