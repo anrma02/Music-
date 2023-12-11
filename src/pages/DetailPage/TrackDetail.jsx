@@ -36,20 +36,18 @@ function TrackDetail() {
      const { id } = useParams();
      const [track, setTrack] = useState(null);
 
-
      const fetchTrackData = useCallback(async () => {
           try {
-               const res = await axios.get(`${baseUrl}track/get_track_by_id/${id}`);
+               const res = await axios.get(`http://localhost:8000/track/get_track_by_id/${id}`);
                const result = res.data.items;
                console.log("🚀 fetchTrackData ~ result:", result);
 
                if (result.artist) {
-                    // Fetch additional information about each track in the artist
-                    const trackPromises = result.artist[0]?.tracks?.map(async (trackId) => {
+
+                    const trackPromises = (result.artist[0]?.tracks || []).map(async (trackId) => {
                          const trackRes = await axios.get(`${baseUrl}track/get_track_by_id/${trackId}`);
                          return trackRes.data.items;
                     });
-
                     const trackNames = await Promise.all(trackPromises);
 
                     setTrack({ ...result, trackNames });
@@ -101,27 +99,28 @@ function TrackDetail() {
                                    <div className={cx("aa")}>
                                         <div className={cx("lyric")}>
                                              {
-                                                  typeof track.lyric === 'object' && Array.isArray(track.lyric.title)
-                                                       ? track.lyric.title.map((line, index) => (
+                                                  typeof track.lyrics === 'object' && Array.isArray(track.lyrics[0]?.title)
+                                                       ? track.lyrics[0].title.map((line, index) => (
                                                             <span key={index}>
                                                                  {line}
-                                                                 {index !== track.lyric.title.length - 1 && <br />}
+                                                                 {index !== track.lyrics[0].title.length - 1 && <br />}
                                                             </span>
                                                        ))
-                                                       : Array.isArray(track.lyric)
-                                                            ? track.lyric.map((line, index) => (
+                                                       : Array.isArray(track.lyrics)
+                                                            ? track.lyrics.map((line, index) => (
                                                                  <span key={index}>
                                                                       {line}
-                                                                      {index !== track.lyric.length - 1 && <br />}
+                                                                      {index !== track.lyrics.length - 1 && <br />}
                                                                  </span>
                                                             ))
-                                                            : track.lyric?.split('\n').map((line, index) => (
+                                                            : track.lyrics?.split('\n').map((line, index) => (
                                                                  <span key={index}>
                                                                       {line}
-                                                                      {index !== track.lyric?.split('\n').length - 1 && <br />}
+                                                                      {index !== track.lyrics?.split('\n').length - 1 && <br />}
                                                                  </span>
                                                             ))
                                              }
+
                                         </div>
                                         <Link className=" h-[100px] hover:bg-[#9b9a9a1f] hover:rounded-[10px]">
                                              <div className={cx('info-artist')}>
