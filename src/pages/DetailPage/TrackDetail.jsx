@@ -4,10 +4,13 @@ import classNames from "classnames/bind";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
+
 
 import style from "./Detail.module.scss";
 import Image from "~/assest/image";
+import { useSelector } from "react-redux";
+import { useAudio } from "~/Context/AudioProvider";
 
 
 const baseUrl = 'http://localhost:8000/';
@@ -33,8 +36,12 @@ function millisecondsToMinutesAndSeconds1(milliseconds) {
 }
 
 function TrackDetail() {
+     const user = useSelector((state) => state.auth.login?.currentUser);
+     const { playPauseToggle, isPlaying } = useAudio();
      const { id } = useParams();
      const [track, setTrack] = useState(null);
+
+
 
      const fetchTrackData = useCallback(async () => {
           try {
@@ -86,43 +93,58 @@ function TrackDetail() {
                          </div>
                          <div className={cx('detail-main')}>
                               <div className={cx("flex w-[100px]  justify-between")}>
-                                   <button className={cx("icon-play")} >
-                                        <FontAwesomeIcon icon={faPlay} className="text-black" />
-                                   </button>
+
+                                   {isPlaying
+                                        ?
+                                        <button className={cx("icon-play")} onClick={playPauseToggle} >
+                                             <FontAwesomeIcon icon={faPause} className="text-black" />
+                                        </button> :
+                                        <button className={cx("icon-play")}
+                                             onClick={() => playPauseToggle(baseUrl + track.audio.path)} >
+                                             <FontAwesomeIcon icon={faPlay} className="text-black" />
+                                        </button>}
+
+
                                    <button className={cx("icon-heart")}  >
                                         <FontAwesomeIcon icon={faHeart} />
                                    </button>
                               </div>
 
                               <div className={cx('ff')}>
-                                   <h1>Lyrics</h1>
-                                   <div className={cx("aa")}>
-                                        <div className={cx("lyric")}>
-                                             {
-                                                  typeof track.lyrics === 'object' && Array.isArray(track.lyrics[0]?.title)
-                                                       ? track.lyrics[0].title.map((line, index) => (
-                                                            <span key={index}>
-                                                                 {line}
-                                                                 {index !== track.lyrics[0].title.length - 1 && <br />}
-                                                            </span>
-                                                       ))
-                                                       : Array.isArray(track.lyrics)
-                                                            ? track.lyrics.map((line, index) => (
-                                                                 <span key={index}>
-                                                                      {line}
-                                                                      {index !== track.lyrics.length - 1 && <br />}
-                                                                 </span>
-                                                            ))
-                                                            : track.lyrics?.split('\n').map((line, index) => (
-                                                                 <span key={index}>
-                                                                      {line}
-                                                                      {index !== track.lyrics?.split('\n').length - 1 && <br />}
-                                                                 </span>
-                                                            ))
-                                             }
 
-                                        </div>
-                                        <Link className=" h-[100px] hover:bg-[#9b9a9a1f] hover:rounded-[10px]">
+                                   <div className={cx("aa")}>
+
+                                        {user
+                                             ?
+                                             <div className={cx("lyric")}>
+                                                  <h1>Lyrics</h1>
+                                                  {
+                                                       typeof track.lyrics === 'object' && Array.isArray(track.lyrics[0]?.title)
+                                                            ? track.lyrics[0].title.map((line, index) => (
+                                                                 <span key={index}>
+                                                                      {line}
+                                                                      {index !== track.lyrics[0].title.length - 1 && <br />}
+                                                                 </span>
+                                                            ))
+                                                            : Array.isArray(track.lyrics)
+                                                                 ? track.lyrics.map((line, index) => (
+                                                                      <span key={index}>
+                                                                           {line}
+                                                                           {index !== track.lyrics.length - 1 && <br />}
+                                                                      </span>
+                                                                 ))
+                                                                 : track.lyrics?.split('\n').map((line, index) => (
+                                                                      <span key={index}>
+                                                                           {line}
+                                                                           {index !== track.lyrics?.split('\n').length - 1 && <br />}
+                                                                      </span>
+                                                                 ))
+                                                  }
+                                             </div>
+                                             :
+                                             <div>Login </div>}
+                                        <div className="mt-[20px]">  </div>
+                                        <Link to={`/detail/artist/${track.artist[0]._id}`} className=" h-[100px] hover:bg-[#d4d0d01f] hover:rounded-[10px]">
                                              <div className={cx('info-artist')}>
                                                   <div  >
                                                        <Image className={cx("w-[80px] mr-[20px]   rounded-full  ")} src={baseUrl + track.artist[0].image.path} />
@@ -138,15 +160,19 @@ function TrackDetail() {
                                         </Link>
 
 
+
                                    </div>
                               </div>
                               <div >
 
                                    {track.trackNames.map((items, index) => (
-                                        <div key={index} className={cx("detail--song")}>
-                                             <div className={cx("index")}> {index + 1}</div>
-                                             <div className={cx("Title")}>{items.name}</div>
-                                             <div className={cx("Time")}>{millisecondsToMinutesAndSeconds1(items.duration)}</div>
+                                        <div key={index.id} className={cx('grid h-[70px] grid-cols-[40px_minmax(500px,_1fr)_60px] grid-flow-cols gap-4 rounded-[6px]  items-center hover:bg-[#d0d0d019]  hover:delay-100 ')}>
+                                             <div className="pl-[6px]" > {index + 1}</div>
+                                             <div className="flex items-center ">
+                                                  <Image className={'w-[50px]  rounded-[5px] mr-[15px] '} src={baseUrl + items.image?.path} />
+                                                  <Link to={`/detail/track/${items._id}`}>{items.name}</Link>
+                                             </div>
+                                             <div >{millisecondsToMinutesAndSeconds1(items.duration)}</div>
                                         </div>
                                    ))}
 

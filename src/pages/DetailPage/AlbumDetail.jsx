@@ -62,6 +62,7 @@ function AlbumDetail() {
                               <div className={cx("detail_header")}>
                                    <div className={cx("flex self-end flex-shrink-0 z-0")}>
                                         <Image className={cx("image")} src={baseUrl + album?.image?.path} alt={album.name} />
+
                                         <div className={cx("flex flex-1 flex-col flex-nowrap justify-end z-0")}>
                                              <span className={cx('title')}>
                                                   <h1 >{album.name}</h1>
@@ -99,20 +100,30 @@ function AlbumDetail() {
                                         <div className={cx("Time")}><FontAwesomeIcon icon={faClock} /></div >
                                    </div>
 
-                                   <div className={cx('detail--song')}>
+                                   <>
+                                        {album.tracks.map((items, index) =>
+                                             <div key={index.id} className={cx('grid h-[70px] grid-cols-[40px_minmax(500px,_1fr)_60px] grid-flow-cols gap-4 rounded-[6px]  items-center hover:bg-[#d0d0d019]  hover:delay-100 ')}>
+                                                  <div className=" pl-4 ">
+                                                       {index + 1}
+                                                  </div>
+                                                  <div className={cx(" flex items-center  ")}>
+                                                       <Image className={'w-[50px]  rounded-[5px] mr-[15px] '} src={baseUrl + items.image?.path} />
+                                                       <Link to={`/detail/track/${items._id}`} >
+                                                            <span className={cx(" w-full overflow-hidden mt-2 text-[16px] font-medium text-left leading-normal hover:underline")}>
+                                                                 {items.name}
+                                                            </span>
+                                                       </Link>
+                                                  </div>
+                                                  <div className={cx()}>
+                                                       <span className=" ">
+                                                            {millisecondsToMinutesAndSeconds1(items.duration)}
+                                                       </span>
+                                                  </div>
+                                             </div>
 
-                                        <div className={cx("Title")}>
+                                        )}
+                                   </>
 
-                                             <Link to={`/detail/track/${album.tracks[0]._id}`} >
-                                                  <span className={cx(" w-full overflow-hidden mt-2 text-left leading-normal hover:underline")}>{album.tracks[0].name}</span>
-                                             </Link>
-                                             <span
-                                                  className="grid text-[12px] mt-[3px] ">{album.artist.name}</span>
-                                        </div>
-                                        <div className={cx("Time")}><span className=" ">{millisecondsToMinutesAndSeconds1(album.tracks[0]?.duration)}</span>
-
-                                        </div>
-                                   </div>
                               </div>
                          </div>
 

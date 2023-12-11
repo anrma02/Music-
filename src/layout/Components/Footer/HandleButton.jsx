@@ -5,31 +5,22 @@ import { TbPlayerTrackNext, TbPlayerTrackPrev } from 'react-icons/tb';
 import { IoRepeatSharp } from 'react-icons/io5'
 import Slider from '@mui/material/Slider';
 import { useTheme } from '@mui/material/styles';
-import { useDispatch } from 'react-redux';
 
-import { playPause } from "~/redux/Services/playerSlice";
+
 import style from './Footer.module.scss';
 import React from 'react';
+import { useAudio } from '~/Context/AudioProvider';
 
 
 const cx = classNames.bind(style);
 
 function HandleButton() {
-     const [isRepeat, setIsRepeat] = React.useState(false);
-     const [isShuffle, setIsShuffle] = React.useState(false);
-     const [isPlaying, setIsPlaying] = React.useState(false);
-     const [currentSongIndex, setCurrentSongIndex] = React.useState(0);
-     const [songs, setSongs] = React.useState();
-     const [position, setPosition] = React.useState(0);
-     const duration = 180
 
-     const dispatch = useDispatch();
-
-     //  audioRef.current?.duration || 0;
-     const audioRef = React.useRef(null);
+     const { isPlaying, playPauseToggle, audioUrl } = useAudio();
+     const position = 0;
+     const duration = 0;
 
      const theme = useTheme();
-
      function formatDuration(value) {
           const minute = Math.floor(value / 60);
           const secondLeft = value - minute * 60;
@@ -37,47 +28,58 @@ function HandleButton() {
      }
 
 
+
+     const handlePlay = () => {
+
+     };
+
      const handleNextSong = () => {
-          setCurrentSongIndex((prevIndex) => (prevIndex + 1) % songs.length);
+
      };
 
      const handlePreviousSong = () => {
-          setCurrentSongIndex((prevIndex) => (prevIndex - 1 + songs.length) % songs.length);
+
      };
 
      const handleRepeatClick = () => {
-          setIsRepeat(!isRepeat);
+
      };
 
      const handleShuffleClick = () => {
-          setIsShuffle(!isShuffle);
+
      };
 
-     const handleSeek = (_, value) => {
-          setPosition(value);
-          audioRef.current.currentTime = value;
+     const handleSeek = () => {
+
      };
 
      return (
           <>
                <div className={cx("icon-play")}>
-                    <button className={cx('button', { 'clicked': isRepeat })} onClick={handleRepeatClick}>
-                         <BiShuffle className={cx('icon', { 'red': isRepeat })} />
+                    <button className={cx('button')} onClick={handleRepeatClick}>
+                         <BiShuffle className={cx('icon')} />
                     </button>
 
+                    {/* audio */}
 
+                    {/*  */}
                     <button onClick={handlePreviousSong}>
                          <TbPlayerTrackPrev className={cx('icon')} />
                     </button>
 
-
+                    <button onClick={playPauseToggle}>
+                         {isPlaying ?
+                              <AiOutlinePauseCircle className={cx('icon')} />
+                              :
+                              <AiOutlinePlayCircle className={cx('icon')} />}
+                    </button>
 
                     <button onClick={handleNextSong} >
                          <TbPlayerTrackNext className={cx('icon')} />
                     </button>
 
-                    <button className={cx('button', { 'clicked': isShuffle })} onClick={handleShuffleClick}>
-                         <IoRepeatSharp className={cx('icon', { 'red': isShuffle })} />
+                    <button className={cx('button')} onClick={handleShuffleClick}>
+                         <IoRepeatSharp className={cx('icon')} />
                     </button>
                </div>
                <div className={cx("flex justify-center px-2")}>

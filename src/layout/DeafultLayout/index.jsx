@@ -5,18 +5,21 @@ import Header from '../Components/Header';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import SearchProvider from '~/Context/SearchProvider';
+import { AudioProvider } from '~/Context/AudioProvider';
 
 function DefaultLayout({ children }) {
     return (
         <div className="containers">
-            <SearchProvider>
-                <Header />
-                <Navbar />
-                <article >
-                    {children}
-                </article>
-            </SearchProvider>
-            <Footer />
+            <AudioProvider>
+                <SearchProvider>
+                    <Header />
+                    <Navbar />
+                    <article >
+                        {children}
+                    </article>
+                </SearchProvider>
+                <Footer />
+            </AudioProvider>
         </div>
     );
 }
