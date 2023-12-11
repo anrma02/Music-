@@ -15,6 +15,15 @@ export const deleteArtist = async (artistId) => {
     }
 }
 
+export const deleteAlbum = async (albumId) => {
+    try {
+        const response = await axios.delete(`http://localhost:8000/album/delete_album/${albumId}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 export const addTracksToArtist = async (artistId, selectedTracks) => {
     try {
@@ -61,6 +70,26 @@ export const createTrack = async (trackData) => {
     }
 };
 
+// export const updateAlbum = async (albumData, albumId) => {
+
+//     try {
+//         const formData = new FormData();
+//         formData.append("name", albumData.name);
+//         formData.append("duration", albumData.duration);
+//         formData.append("genre", albumData.genre);
+//         formData.append('artist', albumData.artist);
+//         formData.append("audio", albumData.audio);
+//         formData.append("image", albumData.image);
+
+//         const response = await axios.put(`http://localhost:8000/track/update_track/${albumId}`, formData, {
+//         });
+//         return response && response.data;
+
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
 
 export const updateTrack = async (trackData, trackId) => {
 
@@ -77,13 +106,12 @@ export const updateTrack = async (trackData, trackId) => {
 
         });
         return response && response.data;
-
-
-
     } catch (error) {
         console.log(error);
     }
 }
+
+
 
 export const deleteTrack = async (trackId) => {
     try {

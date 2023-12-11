@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import UserList from "~/components/Admin/UserList";
 import AdminTrack from "~/components/Admin/AdminTrack";
 import AdminArtist from "~/components/Admin/AdminArtist";
+import AdminAlbum from "~/components/Admin/AdminAlbum";
 
 
 const tab = [
@@ -70,7 +71,7 @@ function AdminPage() {
                     {
                          activeTab === 1 && <AdminTrack />
                     }
-                    {activeTab === 2 && <div className="text-white">Album</div>
+                    {activeTab === 2 && <AdminAlbum />
                     }
 
                     {activeTab === 3 && <AdminArtist />
