@@ -14,6 +14,8 @@ export const AudioProvider = ({ children }) => {
      const [audioUrl, setAudioUrl] = useState('');
      const [currentTime, setCurrentTime] = useState(0);
      const [duration, setDuration] = useState(0);
+     const [initialSeekPosition, setInitialSeekPosition] = useState(0);
+     const [sliderValue, setSliderValue] = useState(0);
 
      const playPauseToggle = (url) => {
           if (audioUrl === url) {
@@ -25,6 +27,8 @@ export const AudioProvider = ({ children }) => {
           } else {
                setAudioUrl(url);
                setCurrentTime(0);
+               setInitialSeekPosition(0);
+               setSliderValue(0);
                audioRef.current.src = url;
                audioRef.current.currentTime = 0;
                audioRef.current.play();
@@ -34,6 +38,7 @@ export const AudioProvider = ({ children }) => {
 
      const handleTimeUpdate = () => {
           setCurrentTime(audioRef.current.currentTime);
+          setSliderValue(audioRef.current.currentTime);
      };
 
      const handleLoadedData = () => {
@@ -51,6 +56,12 @@ export const AudioProvider = ({ children }) => {
           };
      }, [audioUrl]);
 
+     useEffect(() => {
+          if (currentTime === duration) {
+               setInitialSeekPosition(0);
+          }
+     }, [currentTime, duration]);
+
      const value = {
           isPlaying,
           audioUrl,
@@ -58,6 +69,10 @@ export const AudioProvider = ({ children }) => {
           currentTime,
           duration,
           audioRef,
+          initialSeekPosition,
+          setInitialSeekPosition,
+          sliderValue,
+          setSliderValue,
      };
 
      return <AudioContext.Provider value={value}>{children}</AudioContext.Provider>;

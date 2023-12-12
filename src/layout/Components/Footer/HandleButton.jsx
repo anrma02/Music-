@@ -1,8 +1,4 @@
-function formatDuration(value) {
-     const minute = Math.floor(value / 60);
-     const secondLeft = value - minute * 60;
-     return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
-}
+
 import classNames from 'classnames/bind';
 import { AiOutlinePauseCircle, AiOutlinePlayCircle } from 'react-icons/ai';
 import { BiShuffle } from 'react-icons/bi';
@@ -15,16 +11,34 @@ import { useTheme } from '@mui/material/styles';
 import style from './Footer.module.scss';
 
 import { useAudio } from '~/Context/AudioProvider';
-import { useState } from 'react';
+
 
 const cx = classNames.bind(style);
 
 
 
+function formatDuration(value) {
+     const minute = Math.floor(value / 60);
+     const secondLeft = value - minute * 60;
+     return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
+}
+
+
 
 function HandleButton() {
-     const { isPlaying, playPauseToggle, audioUrl, currentTime, duration, audioRef } = useAudio();
-     const [sliderValue, setSliderValue] = useState(currentTime)
+     const {
+          isPlaying,
+          sliderValue,
+          setSliderValue,
+          playPauseToggle,
+          audioUrl,
+          currentTime,
+          duration, audioRef,
+          initialSeekPosition,
+          setInitialSeekPosition
+     } = useAudio();
+
+
      const theme = useTheme();
 
      const handPlay = () => {
@@ -33,10 +47,15 @@ function HandleButton() {
 
      const handleNextSong = () => {
           // Implement logic for next song
+          setInitialSeekPosition(0);
+          setSliderValue(0);
      };
 
      const handlePreviousSong = () => {
           // Implement logic for previous song
+
+          setInitialSeekPosition(0);
+          setSliderValue(0);
      };
 
      const handleRepeatClick = () => {
@@ -48,16 +67,12 @@ function HandleButton() {
      };
 
      const handleSeek = (event, newValue) => {
-          // Pause the audio while seeking
           audioRef.current.pause();
-          // Update the slider value
           setSliderValue(newValue);
      };
 
      const handleSeekEnd = () => {
-          // Set the audio position to the selected value
-          audioRef.current.currentTime = sliderValue;
-          // If the audio was playing, resume playback
+          audioRef.current.currentTime = sliderValue || initialSeekPosition;
           if (isPlaying) {
                audioRef.current.play();
           }
