@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Image from '~/assest/image';
+import { useAudio } from '~/Context/AudioProvider';
 
 const baseUrl = 'http://localhost:8000/';
 
@@ -21,7 +22,11 @@ function millisecondsToMinutesAndSeconds(milliseconds) {
 }
 
 function TrackItem({ data, index }) {
+     const { playPauseToggle, isPlaying } = useAudio();
      const [hoveredIndex, setHoveredIndex] = useState(null);
+
+
+
      return (
           <>
                <div
@@ -39,7 +44,17 @@ function TrackItem({ data, index }) {
                                              </div>
                                         }
                                    >
-                                        <FontAwesomeIcon icon={faPlay} />
+
+                                        {isPlaying
+                                             ?
+                                             <button onClick={playPauseToggle}>
+                                                  <FontAwesomeIcon icon={faPause} />
+                                             </button>
+                                             :
+                                             <button onClick={() => playPauseToggle(baseUrl + data.audio.path)} >
+                                                  <FontAwesomeIcon icon={faPlay} />
+                                             </button>
+                                        }
                                    </Tippy>
                               </div>
                          ) : (
@@ -57,7 +72,7 @@ function TrackItem({ data, index }) {
                                    <div className={'flex items-center w-[250px] overflow-auto font-semibold text-white '}>
                                         <Link to={`/detail/track/${data._id}`}>  {data?.name}</Link>
                                    </div>
-                                   <Link to={`/detail/${data?.artist && data.artist.length > 0 ? data.artist[0]._id : ''}`}>
+                                   <Link to={`/detail/artist/${data?.artist && data.artist.length > 0 ? data.artist[0]._id : ''}`}>
                                         <span className={'flex items-center text-[12px] text-[#dedede] font-medium hover:decoration-solid'}>
                                              {data?.artist && data.artist.length > 0 ? data.artist[0].name : ''}
                                         </span>

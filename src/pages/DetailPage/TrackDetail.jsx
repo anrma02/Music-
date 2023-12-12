@@ -1,7 +1,7 @@
 
 import axios from "axios";
 import classNames from "classnames/bind";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
@@ -37,10 +37,10 @@ function millisecondsToMinutesAndSeconds1(milliseconds) {
 
 function TrackDetail() {
      const user = useSelector((state) => state.auth.login?.currentUser);
-     const { playPauseToggle, isPlaying } = useAudio();
+     const { playPauseToggle, isPlaying, } = useAudio();
      const { id } = useParams();
      const [track, setTrack] = useState(null);
-
+     const topRef = useRef(null);
 
 
      const fetchTrackData = useCallback(async () => {
@@ -64,9 +64,18 @@ function TrackDetail() {
           }
      }, [id]);
 
+
      useEffect(() => {
           fetchTrackData();
      }, [fetchTrackData]);
+
+     const handleTrackClick = () => {
+          if (topRef.current) {
+               topRef.current.scrollIntoView({ behavior: 'smooth' });
+          }
+     };
+
+
 
      return (
           <>
@@ -86,23 +95,25 @@ function TrackDetail() {
                                                        {track.artist[0].name}
                                                   </Link>
                                              </span>
-                                             <span>{millisecondsToMinutesAndSeconds(track.duration)} </span>
+                                             <span>
+                                                  {millisecondsToMinutesAndSeconds(track.duration)}
+                                             </span>
                                         </div>
                                    </div>
                               </div>
                          </div>
                          <div className={cx('detail-main')}>
                               <div className={cx("flex w-[100px]  justify-between")}>
-
                                    {isPlaying
                                         ?
                                         <button className={cx("icon-play")} onClick={playPauseToggle} >
                                              <FontAwesomeIcon icon={faPause} className="text-black" />
                                         </button> :
                                         <button className={cx("icon-play")}
-                                             onClick={() => playPauseToggle(baseUrl + track.audio.path)} >
+                                             onClick={() => playPauseToggle(baseUrl + track.audio?.path)} >
                                              <FontAwesomeIcon icon={faPlay} className="text-black" />
-                                        </button>}
+                                        </button>
+                                   }
 
 
                                    <button className={cx("icon-heart")}  >
@@ -166,18 +177,23 @@ function TrackDetail() {
                               <div >
 
                                    {track.trackNames.map((items, index) => (
-                                        <div key={index.id} className={cx('grid h-[70px] grid-cols-[40px_minmax(500px,_1fr)_60px] grid-flow-cols gap-4 rounded-[6px]  items-center hover:bg-[#d0d0d019]  hover:delay-100 ')}>
-                                             <div className="pl-[6px]" > {index + 1}</div>
+                                        <div
+                                             key={index.id}
+                                             className={cx('grid h-[70px] grid-cols-[40px_minmax(500px,_1fr)_60px] grid-flow-cols gap-4 rounded-[6px]  items-center hover:bg-[#d0d0d019]  hover:delay-100 ')}
+                                             onClick={handleTrackClick} // Add this onClick handler
+                                        >
+                                             <div className="pl-[6px]"> {index + 1}</div>
                                              <div className="flex items-center ">
                                                   <Image className={'w-[50px]  rounded-[5px] mr-[15px] '} src={baseUrl + items.image?.path} />
                                                   <Link to={`/detail/track/${items._id}`}>{items.name}</Link>
                                              </div>
-                                             <div >{millisecondsToMinutesAndSeconds1(items.duration)}</div>
+                                             <div>{millisecondsToMinutesAndSeconds1(items.duration)}</div>
                                         </div>
                                    ))}
 
                               </div>
                          </div>
+
                     </div >
                )
                }
