@@ -10,7 +10,7 @@ import { AudioProvider } from '~/Context/AudioProvider';
 function DefaultLayout({ children }) {
     return (
         <div className="containers">
-            <AudioProvider>
+            <AudioProvider  >
                 <SearchProvider>
                     <Header />
                     <Navbar />

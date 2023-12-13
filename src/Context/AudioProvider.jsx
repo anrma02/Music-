@@ -1,5 +1,8 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+
+
+const baseUrl = 'http://localhost:8000/';
 
 const AudioContext = createContext();
 
@@ -16,8 +19,13 @@ export const AudioProvider = ({ children }) => {
      const [duration, setDuration] = useState(0);
      const [initialSeekPosition, setInitialSeekPosition] = useState(0);
      const [sliderValue, setSliderValue] = useState(0);
+     const [activeTrackIndex, setActiveTrackIndex] = useState(0);
+     const [artist, setArtist] = useState({});
+     const [isShuffled, setIsShuffled] = useState(false);
+     const [shuffledPlaylist, setShuffledPlaylist] = useState([]);
+     const [shuffledIndex, setShuffledIndex] = useState(0);
 
-     const playPauseToggle = (url) => {
+     const playPauseToggle = useCallback((url) => {
           if (audioUrl === url) {
                if (isPlaying) {
                     audioRef.current.pause();
@@ -32,9 +40,11 @@ export const AudioProvider = ({ children }) => {
                audioRef.current.src = url;
                audioRef.current.currentTime = 0;
                audioRef.current.play();
-          }
-          setIsPlaying(!isPlaying);
-     };
+
+
+          } setIsPlaying(!isPlaying);
+
+     }, [audioUrl, isPlaying]);
 
      const handleTimeUpdate = () => {
           setCurrentTime(audioRef.current.currentTime);
@@ -44,6 +54,85 @@ export const AudioProvider = ({ children }) => {
      const handleLoadedData = () => {
           setDuration(audioRef.current.duration);
      };
+
+
+     const handleNextSong = useCallback(() => {
+          if (isShuffled) {
+               const nextIndex = shuffledIndex + 1;
+               if (nextIndex < shuffledPlaylist.length) {
+                    const nextTrack = shuffledPlaylist[nextIndex];
+                    setAudioUrl(baseUrl + nextTrack.audio.path);
+                    setInitialSeekPosition(0);
+                    setSliderValue(0);
+                    audioRef.current.src = baseUrl + nextTrack.audio.path;
+                    audioRef.current.currentTime = 0;
+                    audioRef.current.play();
+                    setShuffledIndex(nextIndex);
+               } else {
+                    // If the end of the shuffled playlist is reached, reshuffle the playlist
+                    const newShuffledPlaylist = [...artist.tracks].sort(() => Math.random() - 0.5);
+                    setShuffledPlaylist(newShuffledPlaylist);
+                    setShuffledIndex(0);
+
+                    const firstTrack = newShuffledPlaylist[0];
+                    setAudioUrl(baseUrl + firstTrack.audio.path);
+                    setInitialSeekPosition(0);
+                    setSliderValue(0);
+                    audioRef.current.src = baseUrl + firstTrack.audio.path;
+                    audioRef.current.currentTime = 0;
+                    audioRef.current.play();
+               }
+          } else {
+
+               const nextIndex = activeTrackIndex + 1;
+               if (nextIndex < artist.tracks.length) {
+                    const nextTrack = artist.tracks[nextIndex];
+                    setAudioUrl(baseUrl + nextTrack.audio.path);
+                    setInitialSeekPosition(0);
+                    setSliderValue(0);
+                    audioRef.current.src = baseUrl + nextTrack.audio.path;
+                    audioRef.current.currentTime = 0;
+                    audioRef.current.play();
+                    setActiveTrackIndex(nextIndex);
+               }
+          }
+     }, [activeTrackIndex, artist.tracks, isShuffled, shuffledIndex, shuffledPlaylist]);
+
+
+     const handlePreviousSong = () => {
+
+          const newIndex = activeTrackIndex - 1;
+
+          if (newIndex >= 0) {
+               const newUrl = baseUrl + artist.tracks[newIndex].audio.path;
+               setAudioUrl(newUrl);
+               setInitialSeekPosition(0);
+               setSliderValue(0);
+               audioRef.current.src = newUrl;
+               audioRef.current.currentTime = 0;
+               audioRef.current.play();
+               setActiveTrackIndex(newIndex);
+          }
+     };
+
+     const handleShuffleClick = () => {
+          const shuffledTracks = [...artist.tracks].sort(() => Math.random() - 0.5);
+
+          const randomIndex = Math.floor(Math.random() * shuffledTracks.length);
+
+          setAudioUrl(baseUrl + shuffledTracks[randomIndex].audio.path);
+          setInitialSeekPosition(0);
+          setSliderValue(0);
+          audioRef.current.src = baseUrl + shuffledTracks[randomIndex].audio.path;
+          audioRef.current.currentTime = 0;
+          audioRef.current.play();
+
+          setActiveTrackIndex(randomIndex);
+          setIsShuffled(!isShuffled);
+     };
+
+
+
 
      useEffect(() => {
           audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
@@ -57,10 +146,21 @@ export const AudioProvider = ({ children }) => {
      }, [audioUrl]);
 
      useEffect(() => {
-          if (currentTime === duration) {
-               setInitialSeekPosition(0);
-          }
-     }, [currentTime, duration]);
+          const handleEnded = () => {
+               handleNextSong();
+          };
+
+          audioRef.current.addEventListener('ended', handleEnded);
+
+
+          return () => {
+               // eslint-disable-next-line react-hooks/exhaustive-deps
+               audioRef.current.removeEventListener('ended', handleEnded);
+          };
+     }, [handleNextSong]);
+
+
+
 
      const value = {
           isPlaying,
@@ -73,6 +173,14 @@ export const AudioProvider = ({ children }) => {
           setInitialSeekPosition,
           sliderValue,
           setSliderValue,
+          activeTrackIndex,
+          handleNextSong,
+          artist,
+          setArtist,
+          handlePreviousSong,
+          handleShuffleClick,
+          isShuffled,
+          setIsShuffled
      };
 
      return <AudioContext.Provider value={value}>{children}</AudioContext.Provider>;

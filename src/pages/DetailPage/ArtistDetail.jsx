@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import classNames from "classnames/bind";
 
@@ -8,6 +8,7 @@ import Image from "~/assest/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { useAudio } from "~/Context/AudioProvider";
+
 
 const cx = classNames.bind(style);
 const baseUrl = 'http://localhost:8000/';
@@ -28,9 +29,9 @@ function millisecondsToMinutesAndSeconds(milliseconds) {
 
 
 function ArtistDetail() {
-     const [artist, setArtist] = useState('');
+
      const { id } = useParams();
-     const { playPauseToggle, isPlaying, activeTrackIndex, setActiveTrackIndex } = useAudio();
+     const { playPauseToggle, isPlaying, activeTrackIndex, artist, setArtist } = useAudio();
 
      const fetchArtistData = useCallback(async () => {
           try {
@@ -40,20 +41,26 @@ function ArtistDetail() {
           } catch (error) {
                console.log('Error fetching Artist data:', error);
           }
-     }, [id]);
+     }, [id, setArtist]);
 
      useEffect(() => {
           fetchArtistData();
      }, [fetchArtistData]);
 
      const handlePlay = (url, index) => {
-          playPauseToggle(url, index);
-          setActiveTrackIndex(index);
+          const track = artist.tracks[index];
+          if (track) {
+               playPauseToggle(url, index);
+
+          }
      };
+
+
+
 
      return (
           <>
-               {artist && (
+               {artist && artist.tracks ? (
                     <div className={cx('detail')}>
                          <div className={cx('detail_header')}>
                               <div className={cx('flex self-end flex-shrink-0 z-0 overflow-y-scroll')}>
@@ -86,28 +93,34 @@ function ArtistDetail() {
                               <div className="my-[30px]  ">
                                    <h1 className="text-[26px] font-bold ">Popular</h1>
                               </div>
-                              <>
-                                   {artist.tracks.map((track, index) => (
-                                        <div key={index.id}
-                                             className={cx('grid h-[70px] grid-cols-[40px_minmax(500px,_1fr)_60px] grid-flow-cols gap-4 rounded-[6px]  items-center hover:bg-[#d0d0d019]  hover:delay-100 ')}
-                                             onClick={() => handlePlay(baseUrl + track.audio?.path, index)}>
-                                             <div className="pl-4">{index + 1}</div>
-                                             <div className={cx('flex items-center')}>
-                                                  <Image className={'w-[50px]  rounded-[5px] mr-[15px] '} src={baseUrl + track.image?.path} />
-                                                  <Link to={`/detail/track/${artist._id}`} >
-                                                       <span
-                                                            className={cx('w-full overflow-hidden mt-2 text-[16px] font-medium text-left leading-normal hover:underline cursor-pointer', {
-                                                                 [' text-green-400']: activeTrackIndex === index,
-                                                            })}
-                                                       >
-                                                            {track.name}
-                                                       </span>
-                                                  </Link>
+                              {artist.tracks && artist.tracks.length > 0
+                                   ?
+                                   <>
+                                        {artist.tracks.map((track, index) => (
+                                             <div key={index.id}
+                                                  className={cx('grid h-[70px] grid-cols-[40px_minmax(500px,_1fr)_60px] grid-flow-cols gap-4 rounded-[6px]  items-center hover:bg-[#d0d0d019]  hover:delay-100 ')}
+                                                  onClick={() => handlePlay(baseUrl + track.audio?.path, index)}>
+                                                  <div className="pl-4">{index + 1}</div>
+                                                  <div className={cx('flex items-center')}>
+                                                       <Image className={'w-[50px]  rounded-[5px] mr-[15px] '} src={baseUrl + track.image?.path} />
+                                                       <Link to={`/detail/track/${track._id}`} >
+                                                            <span
+                                                                 className={cx('w-full overflow-hidden mt-2 text-[16px] font-medium text-left leading-normal hover:underline cursor-pointer', {
+                                                                      [' text-green-400']: activeTrackIndex === index,
+                                                                 })}
+                                                            >
+                                                                 {track.name}
+                                                            </span>
+                                                       </Link>
+                                                  </div>
+                                                  <div>{millisecondsToMinutesAndSeconds(track.duration)}</div>
                                              </div>
-                                             <div>{millisecondsToMinutesAndSeconds(track.duration)}</div>
-                                        </div>
-                                   ))}
-                              </>
+                                        ))}
+                                   </>
+                                   :
+                                   <div>loading</div>
+                              }
+
 
                               <div className="mt-[40px]  ">
                                    <h1 className="text-[26px] font-bold mb-[20px] ">List of music discs</h1>
@@ -120,18 +133,23 @@ function ArtistDetail() {
                                                             <span className="text-ellipsis ">
                                                                  {items.name}
                                                             </span>
-
                                                        </div>
-
                                                   </Link>
                                              )
                                              }
                                         </div>
+
                                    </>
+
+
                               </div>
                          </div>
+
                     </div>
+               ) : (
+                    <div>loading</div>
                )}
+
           </>
      );
 }

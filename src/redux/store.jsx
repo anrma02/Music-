@@ -15,7 +15,7 @@ import { combineReducers } from 'redux'
 import authReducer from './authSlice'
 import userReducer from './userSlice'
 
-// import playerReducer from './Services/playerSlice'
+
 
 
 const persistConfig = {
@@ -28,7 +28,6 @@ const rootReducer = combineReducers({
     auth: authReducer,
     users: userReducer,
 
-    // player: playerReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

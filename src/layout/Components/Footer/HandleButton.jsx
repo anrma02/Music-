@@ -13,6 +13,8 @@ import style from './Footer.module.scss';
 import { useAudio } from '~/Context/AudioProvider';
 
 
+
+
 const cx = classNames.bind(style);
 
 
@@ -35,7 +37,10 @@ function HandleButton() {
           currentTime,
           duration, audioRef,
           initialSeekPosition,
-          setInitialSeekPosition
+          handleShuffleClick,
+
+          handleNextSong,
+          handlePreviousSong, isShuffled
      } = useAudio();
 
 
@@ -45,25 +50,13 @@ function HandleButton() {
           playPauseToggle(audioUrl);
      };
 
-     const handleNextSong = () => {
-          // Implement logic for next song
-          setInitialSeekPosition(0);
-          setSliderValue(0);
-     };
 
-     const handlePreviousSong = () => {
-          // Implement logic for previous song
 
-          setInitialSeekPosition(0);
-          setSliderValue(0);
-     };
 
-     const handleRepeatClick = () => {
+
+     const handleRepeat = () => {
           // Implement logic for repeat click
-     };
 
-     const handleShuffleClick = () => {
-          // Implement logic for shuffle click
      };
 
      const handleSeek = (event, newValue) => {
@@ -82,8 +75,11 @@ function HandleButton() {
      return (
           <>
                <div className={cx('icon-play')}>
-                    <button className={cx('button')} onClick={handleRepeatClick}>
-                         <BiShuffle className={cx('icon')} />
+                    <button
+                         className={cx('button', { 'text-green-500': isShuffled })}
+                         onClick={handleShuffleClick}
+                    >
+                         <BiShuffle className={`text-[24px]  `} />
                     </button>
 
                     <button onClick={handlePreviousSong}>
@@ -102,8 +98,8 @@ function HandleButton() {
                          <TbPlayerTrackNext className={cx('icon')} />
                     </button>
 
-                    <button className={cx('button')} onClick={handleShuffleClick}>
-                         <IoRepeatSharp className={cx('icon')} />
+                    <button className={cx('button')} onClick={handleRepeat}>
+                         <IoRepeatSharp className={`text-[24px]  `} />
                     </button>
                </div>
                <div className={cx('flex justify-center px-2')}>
