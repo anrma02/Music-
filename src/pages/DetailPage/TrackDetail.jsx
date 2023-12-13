@@ -37,9 +37,9 @@ function millisecondsToMinutesAndSeconds1(milliseconds) {
 
 function TrackDetail() {
      const user = useSelector((state) => state.auth.login?.currentUser);
-     const { playPauseToggle, isPlaying, } = useAudio();
+     const { playPauseToggle, isPlaying, track, setTrack } = useAudio();
      const { id } = useParams();
-     const [track, setTrack] = useState(null);
+
      const topRef = useRef(null);
 
 
@@ -62,7 +62,7 @@ function TrackDetail() {
           } catch (error) {
                console.log("Error fetching track data:", error);
           }
-     }, [id]);
+     }, [id, setTrack]);
 
 
      useEffect(() => {

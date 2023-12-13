@@ -4,23 +4,29 @@ import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
-import React from 'react';
 
+import PropTypes from 'prop-types';
 
 import style from './Footer.module.scss';
 import Image from '~/assest/image';
 import HandleButton from './HandleButton';
+import { useAudio } from '~/Context/AudioProvider';
 
 
 const cx = classNames.bind(style);
 
 
-function Footer() {
-    const [value, setValue] = React.useState(30);
+function Footer({ song, artist, imageSrc }) {
+
+    const { volume, increaseVolume, decreaseVolume } = useAudio();
 
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    const handleSliderChange = (event, newValue) => {
+        if (newValue > volume) {
+            increaseVolume();
+        } else if (newValue < volume) {
+            decreaseVolume();
+        }
     };
 
 
@@ -30,7 +36,7 @@ function Footer() {
                 <Image src="" alt={""} />
                 <div className={cx('info-detail')} >
                     <div className={cx("song")}>
-                        CTCHTafsssssssssssssssssssssssssssss
+                        ads
                     </div>
                     <div className={cx("artist")}>
                         MT-P
@@ -48,20 +54,30 @@ function Footer() {
             <>
 
                 <Stack spacing={1} sx={{ width: 150 }} direction="row" alignItems="center">
-                    <VolumeDown />
+                    <VolumeDown onClick={decreaseVolume} />
                     <Slider
                         size="small"
-                        value={value} onChange={handleChange}
-                        aria-label="Small"
-
+                        value={volume}
+                        onChange={handleSliderChange}
+                        aria-label="Volume"
                         valueLabelDisplay="auto"
                     />
-                    <VolumeUp />
+                    <VolumeUp onClick={increaseVolume} />
                 </Stack>
 
             </>
         </div>
     </footer >;
 }
+
+Footer.propTypes = {
+    song: PropTypes.string,
+    artist: PropTypes.string,
+    imageSrc: PropTypes.string,
+    volume: PropTypes.number,
+    audioRef: PropTypes.object,
+    onVolumeChange: PropTypes.func,
+}
+
 
 export default Footer;

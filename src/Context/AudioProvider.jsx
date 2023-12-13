@@ -24,6 +24,8 @@ export const AudioProvider = ({ children }) => {
      const [isShuffled, setIsShuffled] = useState(false);
      const [shuffledPlaylist, setShuffledPlaylist] = useState([]);
      const [shuffledIndex, setShuffledIndex] = useState(0);
+     const [track, setTrack] = useState(null);
+     const [volume, setVolume] = useState(100);
 
      const playPauseToggle = useCallback((url) => {
           if (audioUrl === url) {
@@ -69,7 +71,7 @@ export const AudioProvider = ({ children }) => {
                     audioRef.current.play();
                     setShuffledIndex(nextIndex);
                } else {
-                    // If the end of the shuffled playlist is reached, reshuffle the playlist
+
                     const newShuffledPlaylist = [...artist.tracks].sort(() => Math.random() - 0.5);
                     setShuffledPlaylist(newShuffledPlaylist);
                     setShuffledIndex(0);
@@ -131,7 +133,15 @@ export const AudioProvider = ({ children }) => {
           setIsShuffled(!isShuffled);
      };
 
+     const increaseVolume = () => {
+          setVolume((prevVolume) => Math.min(prevVolume + 10, 100));
+          audioRef.current.volume = (volume + 10) / 100;
+     };
 
+     const decreaseVolume = () => {
+          setVolume((prevVolume) => Math.max(prevVolume - 10, 0));
+          audioRef.current.volume = (volume - 10) / 100;
+     };
 
 
      useEffect(() => {
@@ -180,7 +190,12 @@ export const AudioProvider = ({ children }) => {
           handlePreviousSong,
           handleShuffleClick,
           isShuffled,
-          setIsShuffled
+          setIsShuffled,
+          track,
+          setTrack,
+          volume,
+          increaseVolume,
+          decreaseVolume,
      };
 
      return <AudioContext.Provider value={value}>{children}</AudioContext.Provider>;
